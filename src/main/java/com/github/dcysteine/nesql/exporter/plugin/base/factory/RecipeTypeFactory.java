@@ -1,5 +1,8 @@
 package com.github.dcysteine.nesql.exporter.plugin.base.factory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.dcysteine.nesql.exporter.plugin.EntityFactory;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.util.IdPrefixUtil;
@@ -8,28 +11,28 @@ import com.github.dcysteine.nesql.sql.base.item.Item;
 import com.github.dcysteine.nesql.sql.base.recipe.Dimension;
 import com.github.dcysteine.nesql.sql.base.recipe.RecipeType;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 public class RecipeTypeFactory extends EntityFactory<RecipeType, String> {
+
     public RecipeTypeFactory(PluginExporter exporter) {
         super(exporter);
     }
 
     /** {@code idParts} will be joined with {@link IdUtil#ID_SEPARATOR} to form the ID. */
-    public RecipeType get(
-            String[] idParts, String category, String type, List<Item> icon, String iconInfo,
-            boolean shapeless,
-            Dimension itemInputDimension, Dimension fluidInputDimension,
-            Dimension itemOutputDimension, Dimension fluidOutputDimension) {
+    public RecipeType get(String[] idParts, String category, String type, List<Item> icon, String iconInfo,
+        boolean shapeless, Dimension itemInputDimension, Dimension fluidInputDimension, Dimension itemOutputDimension,
+        Dimension fluidOutputDimension) {
         String id = IdPrefixUtil.RECIPE_TYPE.applyPrefix(idParts);
-        RecipeType recipeType =
-                new RecipeType(
-                        id, category, type, icon, iconInfo, shapeless,
-                        itemInputDimension, fluidInputDimension,
-                        itemOutputDimension, fluidOutputDimension);
+        RecipeType recipeType = new RecipeType(
+            id,
+            category,
+            type,
+            icon,
+            iconInfo,
+            shapeless,
+            itemInputDimension,
+            fluidInputDimension,
+            itemOutputDimension,
+            fluidOutputDimension);
         return findOrPersist(RecipeType.class, recipeType);
     }
 
@@ -38,6 +41,7 @@ public class RecipeTypeFactory extends EntityFactory<RecipeType, String> {
     }
 
     public class Builder {
+
         private String[] idParts = null;
         private String category = null;
         private String type = null;
@@ -129,9 +133,16 @@ public class RecipeTypeFactory extends EntityFactory<RecipeType, String> {
 
         public RecipeType build() {
             return get(
-                    idParts, category, type, icon, iconInfo, shapeless,
-                    itemInputDimension, fluidInputDimension,
-                    itemOutputDimension, fluidOutputDimension);
+                idParts,
+                category,
+                type,
+                icon,
+                iconInfo,
+                shapeless,
+                itemInputDimension,
+                fluidInputDimension,
+                itemOutputDimension,
+                fluidOutputDimension);
         }
 
         private void verifyAllFieldsSet() {
@@ -169,8 +180,7 @@ public class RecipeTypeFactory extends EntityFactory<RecipeType, String> {
             }
 
             if (!missingFields.isEmpty()) {
-                throw new IllegalStateException(
-                        "Missing fields in RecipeTypeFactory.Builder:\n  " + missingFields);
+                throw new IllegalStateException("Missing fields in RecipeTypeFactory.Builder:\n  " + missingFields);
             }
         }
     }

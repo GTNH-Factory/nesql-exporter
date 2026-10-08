@@ -5,6 +5,7 @@ import com.github.dcysteine.nesql.sql.Plugin;
 
 /** Abstract class which helps with setting up and passing around state variables. */
 public abstract class PluginExporter {
+
     protected final Plugin plugin;
     protected final org.apache.logging.log4j.Logger logger;
     protected final ExporterState exporterState;

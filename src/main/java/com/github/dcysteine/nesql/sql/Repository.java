@@ -10,8 +10,10 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 // Prevent Spring from creating a Bean for this class, since it's just a convenience interface.
 @Conditional(Repository.FalseCondition.class)
 public interface Repository<R extends Identifiable<K>, K extends Comparable<K>>
-        extends JpaRepository<R, K>, JpaSpecificationExecutor<R> {
+    extends JpaRepository<R, K>, JpaSpecificationExecutor<R> {
+
     class FalseCondition implements Condition {
+
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             return false;

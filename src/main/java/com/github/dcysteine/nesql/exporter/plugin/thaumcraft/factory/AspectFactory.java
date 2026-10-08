@@ -1,18 +1,20 @@
 package com.github.dcysteine.nesql.exporter.plugin.thaumcraft.factory;
 
-import com.gtnewhorizons.aspectrecipeindex.ModItems;
-import com.gtnewhorizons.aspectrecipeindex.common.items.ItemAspect;
+import java.util.Arrays;
+
+import net.minecraft.item.ItemStack;
+
 import com.github.dcysteine.nesql.exporter.plugin.EntityFactory;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.base.factory.ItemFactory;
 import com.github.dcysteine.nesql.exporter.util.IdPrefixUtil;
 import com.github.dcysteine.nesql.sql.base.item.Item;
 import com.github.dcysteine.nesql.sql.thaumcraft.Aspect;
-import net.minecraft.item.ItemStack;
-
-import java.util.Arrays;
+import com.gtnewhorizons.aspectrecipeindex.ModItems;
+import com.gtnewhorizons.aspectrecipeindex.common.items.ItemAspect;
 
 public class AspectFactory extends EntityFactory<Aspect, String> {
+
     private final ItemFactory itemFactory;
 
     public AspectFactory(PluginExporter exporter) {
@@ -31,10 +33,7 @@ public class AspectFactory extends EntityFactory<Aspect, String> {
         ItemAspect.setAspect(iconItemStack, aspect);
         Item icon = itemFactory.get(iconItemStack);
 
-        aspectEntity =
-                new Aspect(
-                        id, icon,
-                        aspect.getName(), aspect.getLocalizedDescription(), aspect.isPrimal());
+        aspectEntity = new Aspect(id, icon, aspect.getName(), aspect.getLocalizedDescription(), aspect.isPrimal());
         entityManager.persist(aspectEntity);
         return aspectEntity;
     }
@@ -56,7 +55,7 @@ public class AspectFactory extends EntityFactory<Aspect, String> {
 
         Aspect aspectEntity = findAspect(aspect);
         Arrays.stream(aspect.getComponents())
-                .map(this::findAspect)
-                .forEach(aspectEntity::addComponent);
+            .map(this::findAspect)
+            .forEach(aspectEntity::addComponent);
     }
 }

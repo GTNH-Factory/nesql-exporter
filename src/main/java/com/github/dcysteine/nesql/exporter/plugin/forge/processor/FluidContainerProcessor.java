@@ -1,19 +1,20 @@
 package com.github.dcysteine.nesql.exporter.plugin.forge.processor;
 
+import net.minecraftforge.fluids.FluidContainerRegistry;
+
 import com.github.dcysteine.nesql.exporter.main.Logger;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.PluginHelper;
 import com.github.dcysteine.nesql.exporter.plugin.forge.factory.FluidContainerFactory;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 
 public class FluidContainerProcessor extends PluginHelper {
+
     public FluidContainerProcessor(PluginExporter exporter) {
         super(exporter);
     }
 
     public void process() {
-        FluidContainerRegistry.FluidContainerData[] data =
-                FluidContainerRegistry.getRegisteredFluidContainerData();
+        FluidContainerRegistry.FluidContainerData[] data = FluidContainerRegistry.getRegisteredFluidContainerData();
         int total = data.length;
         logger.info("Processing {} Forge fluid container data...", total);
 

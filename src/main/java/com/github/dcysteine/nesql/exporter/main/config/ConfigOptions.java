@@ -1,115 +1,113 @@
 package com.github.dcysteine.nesql.exporter.main.config;
 
-import com.github.dcysteine.nesql.sql.Plugin;
-import com.google.common.collect.ImmutableList;
-import net.minecraftforge.common.config.Property;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
+import net.minecraftforge.common.config.Property;
+
+import com.github.dcysteine.nesql.sql.Plugin;
+import com.google.common.collect.ImmutableList;
+
 public final class ConfigOptions {
+
     private static final List<Option<?>> allOptions = new ArrayList<>();
 
-    public static final Option<Boolean> ENABLE_CONFIG_FILE =
-            new BooleanOption(
-                    Category.OPTIONS, "enable_config_file", false,
-                    "Whether to generate a config file."
-                            + "\nIf disabled, config changes will be forgotten when exiting!"
-                            + "\nDISABLING THIS OPTION WILL DELETE YOUR CONFIG FILE!")
-                    .register();
+    public static final Option<Boolean> ENABLE_CONFIG_FILE = new BooleanOption(
+        Category.OPTIONS,
+        "enable_config_file",
+        false,
+        "Whether to generate a config file." + "\nIf disabled, config changes will be forgotten when exiting!"
+            + "\nDISABLING THIS OPTION WILL DELETE YOUR CONFIG FILE!").register();
 
-    public static final Option<List<String>> ENABLED_PLUGINS =
-            new StringListOption(
-                    Category.OPTIONS, "enabled_plugins", Plugin.NAMES,
-                    "The list of enabled plugins."
-                            + " You should not normally need to modify this.")
-                    .register();
+    public static final Option<List<String>> ENABLED_PLUGINS = new StringListOption(
+        Category.OPTIONS,
+        "enabled_plugins",
+        Plugin.NAMES,
+        "The list of enabled plugins." + " You should not normally need to modify this.").register();
 
-    public static final Option<String> REPOSITORY_NAME =
-            new StringOption(
-                    Category.OPTIONS, "repository_name", "nesql-repository",
-                    "The default name of the exported repository.")
-                    .register();
+    public static final Option<String> REPOSITORY_NAME = new StringOption(
+        Category.OPTIONS,
+        "repository_name",
+        "nesql-repository",
+        "The default name of the exported repository.").register();
 
-    public static final Option<Boolean> USE_POSTGRESQL =
-            new BooleanOption(
-                    Category.OPTIONS, "use_postgresql", false,
-                    "If true, will connect to a local PostgreSQL server instead of using HSQLDB."
-                            + "\nWARNING: The PostgreSQL database will be deleted and overwritten!")
-                    .register();
+    public static final Option<Boolean> USE_POSTGRESQL = new BooleanOption(
+        Category.OPTIONS,
+        "use_postgresql",
+        false,
+        "If true, will connect to a local PostgreSQL server instead of using HSQLDB."
+            + "\nWARNING: The PostgreSQL database will be deleted and overwritten!").register();
 
-    public static final Option<Integer> POSTGRESQL_PORT =
-            new IntegerOption(
-                    Category.OPTIONS, "postgresql_port", 5432,
-                    "The port to use when trying to connect to PostgreSQL."
-                            + "\nHas no effect if use_postgresql is not true.")
-                    .register();
+    public static final Option<Integer> POSTGRESQL_PORT = new IntegerOption(
+        Category.OPTIONS,
+        "postgresql_port",
+        5432,
+        "The port to use when trying to connect to PostgreSQL." + "\nHas no effect if use_postgresql is not true.")
+            .register();
 
-    public static final Option<String> DATABASE_USER =
-            new StringOption(
-                    Category.OPTIONS, "database_user", "sa",
-                    "The username to use when creating or accessing the SQL database.")
-                    .register();
+    public static final Option<String> DATABASE_USER = new StringOption(
+        Category.OPTIONS,
+        "database_user",
+        "sa",
+        "The username to use when creating or accessing the SQL database.").register();
 
-    public static final Option<String> DATABASE_PASSWORD =
-            new StringOption(
-                    Category.OPTIONS, "database_password", "",
-                    "The password to use when creating or accessing the SQL database.")
-                    .register();
+    public static final Option<String> DATABASE_PASSWORD = new StringOption(
+        Category.OPTIONS,
+        "database_password",
+        "",
+        "The password to use when creating or accessing the SQL database.").register();
 
-    public static final Option<Boolean> AUTO_EXPORT_ON_CONNECT =
-            new BooleanOption(
-                    Category.OPTIONS, "auto_export_on_connect", false,
-                    "Whether to automatically export upon connecting to a world."
-                            + "\nThe default repository name will be used."
-                            + "\n/nesql won't work on servers, so use this option instead."
-                            + "\nWARNING: Export will not wait for the NEI item list to load!"
-                            + "\nThis can be worked around by joining a single-player world first.")
-                    .register();
+    public static final Option<Boolean> AUTO_EXPORT_ON_CONNECT = new BooleanOption(
+        Category.OPTIONS,
+        "auto_export_on_connect",
+        false,
+        "Whether to automatically export upon connecting to a world." + "\nThe default repository name will be used."
+            + "\n/nesql won't work on servers, so use this option instead."
+            + "\nWARNING: Export will not wait for the NEI item list to load!"
+            + "\nThis can be worked around by joining a single-player world first.").register();
 
-    public static final Option<Integer> ICON_DIMENSION =
-            new IntegerOption(
-                    Category.OPTIONS, "icon_dimension", 64,
-                    "The size of rendered icons, in pixels. Should probably be a multiple of 32."
-                            + "\nHas no effect if render_icons is false.")
-                    .register();
+    public static final Option<Integer> ICON_DIMENSION = new IntegerOption(
+        Category.OPTIONS,
+        "icon_dimension",
+        64,
+        "The size of rendered icons, in pixels. Should probably be a multiple of 32."
+            + "\nHas no effect if render_icons is false.").register();
 
-    public static final Option<Boolean> RENDER_ICONS =
-            new BooleanOption(
-                    Category.OPTIONS, "render_icons", true,
-                    "Whether to render item and fluid icons when exporting.")
-                    .register();
+    public static final Option<Boolean> RENDER_ICONS = new BooleanOption(
+        Category.OPTIONS,
+        "render_icons",
+        true,
+        "Whether to render item and fluid icons when exporting.").register();
 
-    public static final Option<Integer> MOB_IMAGE_DIMENSION =
-            new IntegerOption(
-                    Category.OPTIONS, "mob_image_dimension", 256,
-                    "The size of rendered mob images, in pixels."
-                            + "\nHas no effect if render_mobs is false.")
-                    .register();
+    public static final Option<Integer> MOB_IMAGE_DIMENSION = new IntegerOption(
+        Category.OPTIONS,
+        "mob_image_dimension",
+        256,
+        "The size of rendered mob images, in pixels." + "\nHas no effect if render_mobs is false.").register();
 
-    public static final Option<Boolean> RENDER_MOBS =
-            new BooleanOption(
-                    Category.OPTIONS, "render_mobs", true,
-                    "Whether to render mob images when exporting.")
-                    .register();
+    public static final Option<Boolean> RENDER_MOBS = new BooleanOption(
+        Category.OPTIONS,
+        "render_mobs",
+        true,
+        "Whether to render mob images when exporting.").register();
 
-    public static final Option<Integer> RENDER_IMAGES_PER_TICK =
-            new IntegerOption(
-                    Category.OPTIONS, "render_images_per_tick", 256,
-                    "The number of images to render per tick. Lower this if your computer"
-                            + " can't handle the default.")
-                    .register();
+    public static final Option<Integer> RENDER_IMAGES_PER_TICK = new IntegerOption(
+        Category.OPTIONS,
+        "render_images_per_tick",
+        256,
+        "The number of images to render per tick. Lower this if your computer" + " can't handle the default.")
+            .register();
 
-    public static final Option<Integer> LOGGING_FREQUENCY =
-            new IntegerOption(
-                    Category.OPTIONS, "logging_frequency", 100,
-                    "How often to log progress. Lower is more frequent."
-                            + " Set to <=0 to disable.")
-                    .register();
+    public static final Option<Integer> LOGGING_FREQUENCY = new IntegerOption(
+        Category.OPTIONS,
+        "logging_frequency",
+        100,
+        "How often to log progress. Lower is more frequent." + " Set to <=0 to disable.").register();
 
     public enum Category {
+
         OPTIONS("options");
 
         private final String name;
@@ -125,6 +123,7 @@ public final class ConfigOptions {
     }
 
     public abstract static class Option<T> implements Supplier<T> {
+
         final Category category;
         final String key;
         final T defaultValue;
@@ -133,9 +132,7 @@ public final class ConfigOptions {
 
         Property property;
 
-        Option(
-                Category category, String key, T defaultValue, String comment,
-                boolean requiresRestart) {
+        Option(Category category, String key, T defaultValue, String comment, boolean requiresRestart) {
             this.category = category;
             this.key = key;
             this.defaultValue = defaultValue;
@@ -172,13 +169,13 @@ public final class ConfigOptions {
     }
 
     public static final class BooleanOption extends Option<Boolean> {
+
         private BooleanOption(Category category, String key, boolean defaultValue, String comment) {
             super(category, key, defaultValue, comment);
         }
 
-        private BooleanOption(
-                Category category, String key, boolean defaultValue, String comment,
-                boolean requiresRestart) {
+        private BooleanOption(Category category, String key, boolean defaultValue, String comment,
+            boolean requiresRestart) {
             super(category, key, defaultValue, comment, requiresRestart);
         }
 
@@ -194,13 +191,13 @@ public final class ConfigOptions {
     }
 
     public static final class IntegerOption extends Option<Integer> {
+
         private IntegerOption(Category category, String key, int defaultValue, String comment) {
             super(category, key, defaultValue, comment);
         }
 
-        private IntegerOption(
-                Category category, String key, int defaultValue, String comment,
-                boolean requiresRestart) {
+        private IntegerOption(Category category, String key, int defaultValue, String comment,
+            boolean requiresRestart) {
             super(category, key, defaultValue, comment, requiresRestart);
         }
 
@@ -216,14 +213,13 @@ public final class ConfigOptions {
     }
 
     public static final class StringOption extends Option<String> {
-        private StringOption(
-                Category category, String key, String defaultValue, String comment) {
+
+        private StringOption(Category category, String key, String defaultValue, String comment) {
             super(category, key, defaultValue, comment);
         }
 
-        private StringOption(
-                Category category, String key, String defaultValue, String comment,
-                boolean requiresRestart) {
+        private StringOption(Category category, String key, String defaultValue, String comment,
+            boolean requiresRestart) {
             super(category, key, defaultValue, comment, requiresRestart);
         }
 
@@ -239,21 +235,19 @@ public final class ConfigOptions {
     }
 
     public static final class StringListOption extends Option<List<String>> {
-        private StringListOption(
-                Category category, String key, List<String> defaultValue, String comment) {
+
+        private StringListOption(Category category, String key, List<String> defaultValue, String comment) {
             super(category, key, defaultValue, comment);
         }
 
-        private StringListOption(
-                Category category, String key, List<String> defaultValue, String comment,
-                boolean requiresRestart) {
+        private StringListOption(Category category, String key, List<String> defaultValue, String comment,
+            boolean requiresRestart) {
             super(category, key, defaultValue, comment, requiresRestart);
         }
 
         @Override
         Property getProperty() {
-            return Config.CONFIG.get(
-                    category.toString(), key, defaultValue.toArray(new String[0]), comment);
+            return Config.CONFIG.get(category.toString(), key, defaultValue.toArray(new String[0]), comment);
         }
 
         @Override

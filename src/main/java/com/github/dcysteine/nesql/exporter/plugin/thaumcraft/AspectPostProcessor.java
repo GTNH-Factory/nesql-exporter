@@ -1,20 +1,20 @@
 package com.github.dcysteine.nesql.exporter.plugin.thaumcraft;
 
+import java.util.Collection;
+
 import com.github.dcysteine.nesql.exporter.main.Logger;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.PluginHelper;
 import com.github.dcysteine.nesql.exporter.plugin.thaumcraft.factory.AspectFactory;
 
-import java.util.Collection;
-
 public class AspectPostProcessor extends PluginHelper {
+
     public AspectPostProcessor(PluginExporter exporter) {
         super(exporter);
     }
 
     public void postProcess() {
-        Collection<thaumcraft.api.aspects.Aspect> aspects =
-                thaumcraft.api.aspects.Aspect.aspects.values();
+        Collection<thaumcraft.api.aspects.Aspect> aspects = thaumcraft.api.aspects.Aspect.aspects.values();
         int total = aspects.size();
         logger.info("Post-processing {} aspects...", total);
 

@@ -1,12 +1,13 @@
 package com.github.dcysteine.nesql.exporter.plugin.thaumcraft;
 
+import java.util.Collection;
+
 import com.github.dcysteine.nesql.exporter.main.Logger;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.PluginHelper;
 import com.github.dcysteine.nesql.exporter.plugin.thaumcraft.factory.AspectFactory;
-import thaumcraft.api.aspects.Aspect;
 
-import java.util.Collection;
+import thaumcraft.api.aspects.Aspect;
 
 public class AspectProcessor extends PluginHelper {
 

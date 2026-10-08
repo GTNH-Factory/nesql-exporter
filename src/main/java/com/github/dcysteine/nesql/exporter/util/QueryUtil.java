@@ -1,19 +1,22 @@
 package com.github.dcysteine.nesql.exporter.util;
 
+import java.util.stream.Stream;
+
 import com.github.dcysteine.nesql.sql.base.item.ItemGroup;
 import com.github.dcysteine.nesql.sql.base.recipe.Recipe;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
-import java.util.stream.Stream;
-
 /**
  * Utility class containing methods for querying the database.
  *
- * <p>If the database schema is changed, this class's queries may need to be updated.
+ * <p>
+ * If the database schema is changed, this class's queries may need to be updated.
  */
 public final class QueryUtil {
+
     // Static class.
     private QueryUtil() {}
 
@@ -23,8 +26,7 @@ public final class QueryUtil {
     }
 
     public static Stream<ItemGroup> getItemGroups(EntityManager entityManager) {
-        TypedQuery<ItemGroup> query =
-                entityManager.createQuery("SELECT ig FROM ItemGroup ig", ItemGroup.class);
+        TypedQuery<ItemGroup> query = entityManager.createQuery("SELECT ig FROM ItemGroup ig", ItemGroup.class);
         return query.getResultStream();
     }
 
@@ -34,8 +36,7 @@ public final class QueryUtil {
     }
 
     public static Stream<Recipe> getRecipes(EntityManager entityManager) {
-        TypedQuery<Recipe> query =
-                entityManager.createQuery("SELECT r FROM Recipe r", Recipe.class);
+        TypedQuery<Recipe> query = entityManager.createQuery("SELECT r FROM Recipe r", Recipe.class);
         return query.getResultStream();
     }
 }

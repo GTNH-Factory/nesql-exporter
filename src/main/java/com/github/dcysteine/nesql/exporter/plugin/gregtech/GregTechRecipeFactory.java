@@ -1,5 +1,14 @@
 package com.github.dcysteine.nesql.exporter.plugin.gregtech;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import net.minecraft.item.ItemStack;
+
 import com.github.dcysteine.nesql.exporter.plugin.EntityFactory;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.base.factory.ItemFactory;
@@ -11,23 +20,18 @@ import com.github.dcysteine.nesql.sql.base.item.Item;
 import com.github.dcysteine.nesql.sql.base.recipe.Recipe;
 import com.github.dcysteine.nesql.sql.gregtech.GregTechRecipe;
 import com.github.dcysteine.nesql.sql.gregtech.GregTechRecipeMetadata;
-import com.github.dcysteine.nesql.sql.quest.QuestLineEntry;
 import com.google.common.base.Joiner;
+
 import cpw.mods.fml.common.ModContainer;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.recipe.RecipeMetadataKey;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTRecipeConstants;
-import jakarta.persistence.ElementCollection;
 import lombok.SneakyThrows;
-import net.minecraft.item.ItemStack;
-
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class GregTechRecipeFactory extends EntityFactory<GregTechRecipe, String> {
+
     private final ItemFactory itemFactory;
 
     public GregTechRecipeFactory(PluginExporter exporter) {
@@ -36,25 +40,21 @@ public class GregTechRecipeFactory extends EntityFactory<GregTechRecipe, String>
     }
 
     @SneakyThrows
-    public GregTechRecipe get(
-            Recipe recipe, GregTechRecipeMap GregTechRecipeMap, GTRecipe gregTechRecipe,
-            Voltage voltageTier, int voltage, List<ItemStack> specialItems) {
+    public GregTechRecipe get(Recipe recipe, GregTechRecipeMap GregTechRecipeMap, GTRecipe gregTechRecipe,
+        Voltage voltageTier, int voltage, List<ItemStack> specialItems) {
         String id = IdPrefixUtil.GREG_TECH_RECIPE.applyPrefix(recipe.getId());
 
-        boolean requiresCleanroom =
-                gregTechRecipe.mSpecialValue == -200 || gregTechRecipe.mSpecialValue == -300;
-        boolean requiresLowGravity =
-                gregTechRecipe.mSpecialValue == -100 || gregTechRecipe.mSpecialValue == -300;
+        boolean requiresCleanroom = gregTechRecipe.mSpecialValue == -200 || gregTechRecipe.mSpecialValue == -300;
+        boolean requiresLowGravity = gregTechRecipe.mSpecialValue == -100 || gregTechRecipe.mSpecialValue == -300;
 
-        List<Item> specialItemEntities =
-                specialItems.stream()
-                        .map(itemFactory::get)
-                        .collect(Collectors.toCollection(ArrayList::new));
+        List<Item> specialItemEntities = specialItems.stream()
+            .map(itemFactory::get)
+            .collect(Collectors.toCollection(ArrayList::new));
 
-        List<String> modOwners = gregTechRecipe.owners == null ? new ArrayList<>() :
-                gregTechRecipe.owners.stream()
-                        .map(ModContainer::getModId)
-                        .collect(Collectors.toCollection(ArrayList::new));
+        List<String> modOwners = gregTechRecipe.owners == null ? new ArrayList<>()
+            : gregTechRecipe.owners.stream()
+                .map(ModContainer::getModId)
+                .collect(Collectors.toCollection(ArrayList::new));
 
         int recipeSpecialValue = gregTechRecipe.mSpecialValue;
         List<String> additionalInfo = new ArrayList<>();
@@ -62,7 +62,7 @@ public class GregTechRecipeFactory extends EntityFactory<GregTechRecipe, String>
             case "gt.recipe.fusionreactor": {
                 // Special handling for fusion recipes.
                 long euToStart = gregTechRecipe.getMetadataOrDefault(GTRecipeConstants.FUSION_THRESHOLD, 0L);
-                recipeSpecialValue = (int)euToStart;
+                recipeSpecialValue = (int) euToStart;
 
                 int euTier;
                 if (euToStart <= 160_000_000) {
@@ -87,10 +87,10 @@ public class GregTechRecipeFactory extends EntityFactory<GregTechRecipe, String>
                 }
 
                 additionalInfo.add(
-                        String.format(
-                                "To start: %s EU (MK %d)",
-                                NumberUtil.formatInteger(euToStart),
-                                Math.max(euTier, vTier)));
+                    String.format(
+                        "To start: %s EU (MK %d)",
+                        NumberUtil.formatInteger(euToStart),
+                        Math.max(euTier, vTier)));
                 break;
             }
 
@@ -110,9 +110,7 @@ public class GregTechRecipeFactory extends EntityFactory<GregTechRecipe, String>
                     }
                 }
 
-                additionalInfo.add(
-                        String.format(
-                                "Heat capacity: %sK (%s)", NumberUtil.formatInteger(heat), tier));
+                additionalInfo.add(String.format("Heat capacity: %sK (%s)", NumberUtil.formatInteger(heat), tier));
                 break;
             }
         }
@@ -120,40 +118,38 @@ public class GregTechRecipeFactory extends EntityFactory<GregTechRecipe, String>
             additionalInfo.addAll(Arrays.asList(gregTechRecipe.getNeiDesc()));
         }
 
-
         Class<?> clazz = RecipeMetadataKey.class;
         Field idField = clazz.getDeclaredField("identifier");
         idField.setAccessible(true);
 
         ArrayList<GregTechRecipeMetadata> metadata = new ArrayList<GregTechRecipeMetadata>();
-        for (Map.Entry<RecipeMetadataKey<?>, Object> meta: gregTechRecipe.getMetadataStorage().getEntries()) {
+        for (Map.Entry<RecipeMetadataKey<?>, Object> meta : gregTechRecipe.getMetadataStorage()
+            .getEntries()) {
             Object value = meta.getValue();
             long exportValue;
-            if (value instanceof Number)
-                exportValue = ((Number)value).longValue();
-            else if (value instanceof Boolean)
-                exportValue = (Boolean) value ? 1 : 0;
+            if (value instanceof Number) exportValue = ((Number) value).longValue();
+            else if (value instanceof Boolean) exportValue = (Boolean) value ? 1 : 0;
             else continue;
 
             Object key = idField.get(meta.getKey());
-            if (key instanceof String)
-                metadata.add(new GregTechRecipeMetadata((String)key, exportValue));
+            if (key instanceof String) metadata.add(new GregTechRecipeMetadata((String) key, exportValue));
         }
 
-        GregTechRecipe gregTechRecipeEntity =
-                new GregTechRecipe(
-                        id,
-                        recipe,
-                        voltageTier.getName(),
-                        voltage,
-                        GregTechRecipeMap.getAmperage(),
-                        gregTechRecipe.mDuration,
-                        recipeSpecialValue,
-                        requiresCleanroom,
-                        requiresLowGravity,
-                        specialItemEntities,
-                        modOwners,
-                        Joiner.on('\n').join(additionalInfo), metadata);
+        GregTechRecipe gregTechRecipeEntity = new GregTechRecipe(
+            id,
+            recipe,
+            voltageTier.getName(),
+            voltage,
+            GregTechRecipeMap.getAmperage(),
+            gregTechRecipe.mDuration,
+            recipeSpecialValue,
+            requiresCleanroom,
+            requiresLowGravity,
+            specialItemEntities,
+            modOwners,
+            Joiner.on('\n')
+                .join(additionalInfo),
+            metadata);
 
         return findOrPersist(GregTechRecipe.class, gregTechRecipeEntity);
     }

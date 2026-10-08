@@ -5,6 +5,7 @@ package com.github.dcysteine.nesql.sql.quest;
  * Each task type will set different fields on the {@link Task} object.
  */
 public enum TaskType {
+
     /** Sets the {@code itemStacks} field. */
     RETRIEVAL("retrieval"),
 
@@ -24,8 +25,7 @@ public enum TaskType {
     LOCATION("location"),
 
     /** Does not set any fields. */
-    UNHANDLED("unhandled"),
-    ;
+    UNHANDLED("unhandled"),;
 
     private final String name;
 

@@ -1,19 +1,23 @@
 package com.github.dcysteine.nesql.exporter.plugin;
 
-import com.github.dcysteine.nesql.exporter.main.Logger;
-import com.github.dcysteine.nesql.sql.base.item.Item;
-import jakarta.persistence.EntityManager;
-import net.minecraft.item.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+
+import net.minecraft.item.ItemStack;
+
+import com.github.dcysteine.nesql.exporter.main.Logger;
+import com.github.dcysteine.nesql.sql.base.item.Item;
+
+import jakarta.persistence.EntityManager;
 
 /**
  * Class that holds the accessor for the database, stores any needed state, and handles listeners.
  */
 public class ExporterState {
-    public interface ItemListener extends BiConsumer<Item, ItemStack> {}
+
+    public interface ItemListener extends BiConsumer<Item, ItemStack> {
+    }
 
     private final EntityManager entityManager;
     private int itemCount;
@@ -47,7 +51,8 @@ public class ExporterState {
      * Call this after each batch of database persists, to prevent the persistence context from
      * getting too large.
      *
-     * <p>See <a href="https://en.wikibooks.org/wiki/Java_Persistence/Persisting#Flush">here</a>.
+     * <p>
+     * See <a href="https://en.wikibooks.org/wiki/Java_Persistence/Persisting#Flush">here</a>.
      */
     public void flushEntityManager() {
         Logger.MOD.info("Flushing entity manager state; this may take a while!");

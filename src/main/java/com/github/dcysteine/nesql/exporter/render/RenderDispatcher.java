@@ -1,29 +1,33 @@
 package com.github.dcysteine.nesql.exporter.render;
 
-import com.github.dcysteine.nesql.exporter.main.Logger;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSetMultimap;
-import net.minecraft.util.EnumChatFormatting;
-
 import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import net.minecraft.util.EnumChatFormatting;
+
+import com.github.dcysteine.nesql.exporter.main.Logger;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSetMultimap;
+
 /**
  * Singleton class which handles inter-thread communication and dispatching of render jobs.
  *
- * <p>Unfortunately, we cannot render in our own thread because it does not have an OpenGL context.
+ * <p>
+ * Unfortunately, we cannot render in our own thread because it does not have an OpenGL context.
  * So we must do all of our rendering in the client thread.
  *
- * <p>This class's singleton instance will also be used as a lock. The contract for this is:
+ * <p>
+ * This class's singleton instance will also be used as a lock. The contract for this is:
  * <ul>
- *     <li>The export thread will call {@link Object#wait()} when it wants to wait for render
- *         jobs to complete
- *     <li>The client thread will call {@link Object#notifyAll()} when all render jobs have
- *         completed
+ * <li>The export thread will call {@link Object#wait()} when it wants to wait for render
+ * jobs to complete
+ * <li>The client thread will call {@link Object#notifyAll()} when all render jobs have
+ * completed
  * </ul>
  */
 public enum RenderDispatcher {
+
     /** Singleton class, enforced by enum. */
     INSTANCE;
 
@@ -45,33 +49,29 @@ public enum RenderDispatcher {
     }
 
     /** Map of valid state transitions. Used for validation. */
-    private static final ImmutableSetMultimap<RendererState, RendererState> STATE_TRANSITIONS =
-            ImmutableSetMultimap.<RendererState, RendererState>builder()
-                    .putAll(RendererState.UNINITIALIZED,
-                            RendererState.INITIALIZING, RendererState.ERROR)
-                    .putAll(RendererState.INITIALIZING,
-                            RendererState.INITIALIZED, RendererState.ERROR)
-                    .putAll(RendererState.INITIALIZED,
-                            RendererState.DESTROYING, RendererState.ERROR)
-                    .putAll(RendererState.DESTROYING,
-                            RendererState.UNINITIALIZED, RendererState.ERROR)
-                    .putAll(RendererState.ERROR,
-                            RendererState.UNINITIALIZED, RendererState.INITIALIZING,
-                            RendererState.ERROR)
-                    .build();
+    private static final ImmutableSetMultimap<RendererState, RendererState> STATE_TRANSITIONS = ImmutableSetMultimap
+        .<RendererState, RendererState>builder()
+        .putAll(RendererState.UNINITIALIZED, RendererState.INITIALIZING, RendererState.ERROR)
+        .putAll(RendererState.INITIALIZING, RendererState.INITIALIZED, RendererState.ERROR)
+        .putAll(RendererState.INITIALIZED, RendererState.DESTROYING, RendererState.ERROR)
+        .putAll(RendererState.DESTROYING, RendererState.UNINITIALIZED, RendererState.ERROR)
+        .putAll(RendererState.ERROR, RendererState.UNINITIALIZED, RendererState.INITIALIZING, RendererState.ERROR)
+        .build();
 
-    private static final ImmutableSet<RendererState> ACTIVE_STATES =
-            ImmutableSet.of(RendererState.INITIALIZING, RendererState.INITIALIZED);
+    private static final ImmutableSet<RendererState> ACTIVE_STATES = ImmutableSet
+        .of(RendererState.INITIALIZING, RendererState.INITIALIZED);
 
     /**
      * Used to keep track of current {@link Renderer} state, as well as ask it to initialize or
      * destroy itself.
      *
-     * <p>The renderer can only be initialized or destroyed on the client thread, so we need this
+     * <p>
+     * The renderer can only be initialized or destroyed on the client thread, so we need this
      * dispatcher to handle sending state change requests from the exporter thread to the client
      * thread.
      *
-     * <p>In order to avoid concurrency issues, it must be the case that each state transition can
+     * <p>
+     * In order to avoid concurrency issues, it must be the case that each state transition can
      * only be performed by either the exporter thread or the client thread, and not both!
      */
     private RendererState rendererState = RendererState.UNINITIALIZED;
@@ -83,21 +83,24 @@ public enum RenderDispatcher {
     }
 
     public synchronized void setRendererState(RendererState newState) {
-        if (!STATE_TRANSITIONS.get(rendererState).contains(newState)) {
+        if (!STATE_TRANSITIONS.get(rendererState)
+            .contains(newState)) {
             throw new IllegalStateException(
-                    String.format(
-                            "Attempted invalid state transition: %s to %s."
-                                    + "\nDid you start up another export"
-                                    + " while one was still in progress?",
-                            rendererState, newState));
+                String.format(
+                    "Attempted invalid state transition: %s to %s." + "\nDid you start up another export"
+                        + " while one was still in progress?",
+                    rendererState,
+                    newState));
         }
 
         if ((newState == RendererState.UNINITIALIZED || newState == RendererState.INITIALIZING)
-                && !jobQueue.isEmpty()) {
-            Logger.chatMessage(String.format(
+            && !jobQueue.isEmpty()) {
+            Logger.chatMessage(
+                String.format(
                     EnumChatFormatting.RED + "Render dispatcher has %s leftover jobs!"
-                            + "\nClearing and transitioning to state %s.",
-                    jobQueue.size(), newState.name()));
+                        + "\nClearing and transitioning to state %s.",
+                    jobQueue.size(),
+                    newState.name()));
             jobQueue.clear();
         } else if (newState == RendererState.ERROR) {
             jobQueue.clear();

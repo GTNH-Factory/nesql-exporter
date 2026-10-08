@@ -1,12 +1,13 @@
 package com.github.dcysteine.nesql.exporter.plugin.forge.processor;
 
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+
 import com.github.dcysteine.nesql.exporter.main.Logger;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.PluginHelper;
 import com.github.dcysteine.nesql.exporter.plugin.forge.factory.OreDictionaryFactory;
-import net.minecraft.item.ItemStack;
-
-import java.util.List;
 
 public class OreDictionaryProcessor extends PluginHelper {
 
@@ -27,8 +28,7 @@ public class OreDictionaryProcessor extends PluginHelper {
                 continue;
             }
 
-            List<ItemStack> itemStacks =
-                    net.minecraftforge.oredict.OreDictionary.getOres(name, false);
+            List<ItemStack> itemStacks = net.minecraftforge.oredict.OreDictionary.getOres(name, false);
             oreDictionaryFactory.get(name, itemStacks);
 
             if (Logger.intermittentLog(count)) {

@@ -1,6 +1,9 @@
 package com.github.dcysteine.nesql.sql.base.item;
 
+import java.util.Set;
+
 import com.github.dcysteine.nesql.sql.Identifiable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -11,14 +14,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Set;
-
 /** A group of {@link ItemStack}s, all fitting into a single input slot in a recipe. */
 @Entity
 @EqualsAndHashCode
 @Getter
 @ToString
 public class ItemGroup implements Identifiable<String> {
+
     @Id
     @Column(nullable = false)
     private String id;

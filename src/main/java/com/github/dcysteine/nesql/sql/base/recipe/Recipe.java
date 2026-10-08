@@ -1,5 +1,10 @@
 package com.github.dcysteine.nesql.sql.base.recipe;
 
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import com.github.dcysteine.nesql.sql.Identifiable;
 import com.github.dcysteine.nesql.sql.base.fluid.Fluid;
 import com.github.dcysteine.nesql.sql.base.fluid.FluidGroup;
@@ -7,6 +12,7 @@ import com.github.dcysteine.nesql.sql.base.fluid.FluidStackWithProbability;
 import com.github.dcysteine.nesql.sql.base.item.Item;
 import com.github.dcysteine.nesql.sql.base.item.ItemGroup;
 import com.github.dcysteine.nesql.sql.base.item.ItemStackWithProbability;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -20,17 +26,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 @Entity
-@Table(indexes = {@Index(columnList = "RECIPE_TYPE_ID")})
+@Table(indexes = { @Index(columnList = "RECIPE_TYPE_ID") })
 @EqualsAndHashCode
 @Getter
 @ToString
 public class Recipe implements Identifiable<String> {
+
     @Id
     @Column(nullable = false)
     private String id;
@@ -44,9 +46,7 @@ public class Recipe implements Identifiable<String> {
 
     /** We directly include item inputs to this recipe, to speed up queries. */
     @ManyToMany
-    @JoinTable(
-            name = "RECIPE_ITEM_INPUTS_ITEMS",
-            indexes = {@Index(columnList = "ITEM_INPUTS_ITEMS_ID")})
+    @JoinTable(name = "RECIPE_ITEM_INPUTS_ITEMS", indexes = { @Index(columnList = "ITEM_INPUTS_ITEMS_ID") })
     private Set<Item> itemInputsItems;
 
     /** Map of input index to fluid group. May be sparse for shaped recipes. */
@@ -55,9 +55,7 @@ public class Recipe implements Identifiable<String> {
 
     /** We directly include fluid inputs to this recipe, to speed up queries. */
     @ManyToMany
-    @JoinTable(
-            name = "RECIPE_FLUID_INPUTS_FLUIDS",
-            indexes = {@Index(columnList = "FLUID_INPUTS_FLUIDS_ID")})
+    @JoinTable(name = "RECIPE_FLUID_INPUTS_FLUIDS", indexes = { @Index(columnList = "FLUID_INPUTS_FLUIDS_ID") })
     private Set<Fluid> fluidInputsFluids;
 
     /** Map of output index to item stack with probability. May be sparse for shaped recipes. */
@@ -71,13 +69,9 @@ public class Recipe implements Identifiable<String> {
     /** Needed by Hibernate. */
     protected Recipe() {}
 
-    public Recipe(
-            String id,
-            RecipeType recipeType,
-            Map<Integer, ItemGroup> itemInputs,
-            Map<Integer, FluidGroup> fluidInputs,
-            Map<Integer, ItemStackWithProbability> itemOutputs,
-            Map<Integer, FluidStackWithProbability> fluidOutputs) {
+    public Recipe(String id, RecipeType recipeType, Map<Integer, ItemGroup> itemInputs,
+        Map<Integer, FluidGroup> fluidInputs, Map<Integer, ItemStackWithProbability> itemOutputs,
+        Map<Integer, FluidStackWithProbability> fluidOutputs) {
         this.id = id;
         this.recipeType = recipeType;
         this.itemInputs = itemInputs;
@@ -101,8 +95,8 @@ public class Recipe implements Identifiable<String> {
     public int compareTo(Identifiable<String> other) {
         if (other instanceof Recipe) {
             return Comparator.comparing(Recipe::getRecipeType)
-                    .thenComparing(Recipe::getId)
-                    .compare(this, (Recipe) other);
+                .thenComparing(Recipe::getId)
+                .compare(this, (Recipe) other);
         } else {
             return Identifiable.super.compareTo(other);
         }

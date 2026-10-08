@@ -1,6 +1,7 @@
 package com.github.dcysteine.nesql.sql;
 
 public interface Identifiable<K extends Comparable<K>> extends Comparable<Identifiable<K>> {
+
     K getId();
 
     @Override

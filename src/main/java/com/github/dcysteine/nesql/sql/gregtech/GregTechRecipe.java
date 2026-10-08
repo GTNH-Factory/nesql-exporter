@@ -1,10 +1,13 @@
 package com.github.dcysteine.nesql.sql.gregtech;
 
+import java.util.Comparator;
+import java.util.List;
+
 import com.github.dcysteine.nesql.sql.Identifiable;
 import com.github.dcysteine.nesql.sql.Metadata;
 import com.github.dcysteine.nesql.sql.base.item.Item;
 import com.github.dcysteine.nesql.sql.base.recipe.Recipe;
-import com.github.dcysteine.nesql.sql.quest.QuestLineEntry;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -16,20 +19,18 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-
 /**
  * Additional GregTech data associated with a recipe.
  *
- * <p>The actual recipe inputs and outputs are still stored in the {@link Recipe} table.
+ * <p>
+ * The actual recipe inputs and outputs are still stored in the {@link Recipe} table.
  */
 @Entity
 @EqualsAndHashCode
 @Getter
 @ToString
 public class GregTechRecipe implements Identifiable<String> {
+
     @Id
     @Column(nullable = false)
     private String id;
@@ -68,20 +69,9 @@ public class GregTechRecipe implements Identifiable<String> {
     /** Needed by Hibernate. */
     protected GregTechRecipe() {}
 
-    public GregTechRecipe(
-            String id,
-            Recipe recipe,
-            String voltageTier,
-            int voltage,
-            int amperage,
-            int duration,
-            int recipeSpecialValue,
-            boolean requiresCleanroom,
-            boolean requiresLowGravity,
-            List<Item> specialItems,
-            List<String> modOwners,
-            String additionalInfo,
-            List<GregTechRecipeMetadata> metadata) {
+    public GregTechRecipe(String id, Recipe recipe, String voltageTier, int voltage, int amperage, int duration,
+        int recipeSpecialValue, boolean requiresCleanroom, boolean requiresLowGravity, List<Item> specialItems,
+        List<String> modOwners, String additionalInfo, List<GregTechRecipeMetadata> metadata) {
         this.id = id;
         this.recipe = recipe;
         this.voltageTier = voltageTier;
@@ -106,8 +96,8 @@ public class GregTechRecipe implements Identifiable<String> {
     public int compareTo(Identifiable<String> other) {
         if (other instanceof GregTechRecipe) {
             return Comparator.comparing(GregTechRecipe::getRecipe)
-                    .thenComparing(GregTechRecipe::getId)
-                    .compare(this, (GregTechRecipe) other);
+                .thenComparing(GregTechRecipe::getId)
+                .compare(this, (GregTechRecipe) other);
         } else {
             return Identifiable.super.compareTo(other);
         }

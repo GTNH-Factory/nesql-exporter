@@ -1,5 +1,15 @@
 package com.github.dcysteine.nesql.exporter.plugin.base.factory;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+
 import com.github.dcysteine.nesql.exporter.main.Logger;
 import com.github.dcysteine.nesql.exporter.main.config.ConfigOptions;
 import com.github.dcysteine.nesql.exporter.plugin.EntityFactory;
@@ -11,19 +21,11 @@ import com.github.dcysteine.nesql.exporter.util.IdUtil;
 import com.github.dcysteine.nesql.exporter.util.ItemUtil;
 import com.github.dcysteine.nesql.exporter.util.StringUtil;
 import com.github.dcysteine.nesql.sql.base.item.Item;
-import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.client.Minecraft;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemFactory extends EntityFactory<Item, String> {
+
     public ItemFactory(PluginExporter exporter) {
         super(exporter);
     }
@@ -39,8 +41,7 @@ public class ItemFactory extends EntityFactory<Item, String> {
             return item;
         }
 
-        GameRegistry.UniqueIdentifier uniqueId =
-                GameRegistry.findUniqueIdentifierFor(itemStack.getItem());
+        GameRegistry.UniqueIdentifier uniqueId = GameRegistry.findUniqueIdentifierFor(itemStack.getItem());
         String modId = uniqueId.modId;
         String internalName = uniqueId.name;
 
@@ -50,28 +51,29 @@ public class ItemFactory extends EntityFactory<Item, String> {
 
         String nbt = "";
         if (itemStack.hasTagCompound()) {
-            nbt = itemStack.getTagCompound().toString();
+            nbt = itemStack.getTagCompound()
+                .toString();
         }
 
         try {
             @SuppressWarnings("unchecked")
-            List<String> tooltip =
-                    new ArrayList<>(((List<String>) itemStack.getTooltip(Minecraft.getMinecraft().thePlayer, true)));
+            List<String> tooltip = new ArrayList<>(
+                ((List<String>) itemStack.getTooltip(Minecraft.getMinecraft().thePlayer, true)));
 
             item = new Item(
-                    id,
-                    StringUtil.formatFilePath(IdUtil.imageFilePath(itemStack)),
-                    modId,
-                    internalName,
-                    itemStack.getUnlocalizedName(),
-                    itemStack.getDisplayName(),
-                    ItemUtil.getItemId(itemStack),
-                    itemDamage,
-                    nbt,
-                    tooltip,
-                    itemStack.getMaxStackSize(),
-                    itemStack.getMaxDamage(),
-                    ItemUtil.getToolClasses(itemStack));
+                id,
+                StringUtil.formatFilePath(IdUtil.imageFilePath(itemStack)),
+                modId,
+                internalName,
+                itemStack.getUnlocalizedName(),
+                itemStack.getDisplayName(),
+                ItemUtil.getItemId(itemStack),
+                itemDamage,
+                nbt,
+                tooltip,
+                itemStack.getMaxStackSize(),
+                itemStack.getMaxDamage(),
+                ItemUtil.getToolClasses(itemStack));
         } catch (Exception e) {
             // Sometimes items will throw exceptions when you try to get their name or tooltip.
             StringWriter stringWriter = new StringWriter();
@@ -80,28 +82,28 @@ public class ItemFactory extends EntityFactory<Item, String> {
             String stackTrace = stringWriter.toString();
 
             item = new Item(
-                    id,
-                    StringUtil.formatFilePath(IdUtil.imageFilePath(itemStack)),
-                    modId,
-                    internalName,
-                    "ERROR",
-                    "ERROR",
-                    ItemUtil.getItemId(itemStack),
-                    itemDamage,
-                    nbt,
-                    new ArrayList<>(),
-                    itemStack.getMaxStackSize(),
-                    itemStack.getMaxDamage(),
-                    new HashMap<>());
+                id,
+                StringUtil.formatFilePath(IdUtil.imageFilePath(itemStack)),
+                modId,
+                internalName,
+                "ERROR",
+                "ERROR",
+                ItemUtil.getItemId(itemStack),
+                itemDamage,
+                nbt,
+                new ArrayList<>(),
+                itemStack.getMaxStackSize(),
+                itemStack.getMaxDamage(),
+                new HashMap<>());
             logger.error("Caught exception while trying to persist item: {}", item.getId());
             e.printStackTrace();
         }
 
         if (ConfigOptions.RENDER_ICONS.get()) {
             Logger.intermittentLog(
-                    logger,
-                    "Enqueueing render of item #{}: " + item.getLocalizedName(),
-                    exporterState.incrementItemCount());
+                logger,
+                "Enqueueing render of item #{}: " + item.getLocalizedName(),
+                exporterState.incrementItemCount());
             RenderDispatcher.INSTANCE.addJob(RenderJob.ofItem(itemStack));
         }
 

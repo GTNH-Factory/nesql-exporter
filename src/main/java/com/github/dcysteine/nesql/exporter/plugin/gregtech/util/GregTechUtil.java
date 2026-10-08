@@ -1,11 +1,13 @@
 package com.github.dcysteine.nesql.exporter.plugin.gregtech.util;
 
-import gregtech.api.util.GTOreDictUnificator;
-import net.minecraft.item.ItemStack;
-
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
+
+import gregtech.api.util.GTOreDictUnificator;
+
 public class GregTechUtil {
+
     // Static class.
     private GregTechUtil() {}
 

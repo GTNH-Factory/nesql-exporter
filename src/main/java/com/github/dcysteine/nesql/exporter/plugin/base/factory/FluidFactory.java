@@ -1,5 +1,8 @@
 package com.github.dcysteine.nesql.exporter.plugin.base.factory;
 
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.github.dcysteine.nesql.exporter.main.Logger;
 import com.github.dcysteine.nesql.exporter.main.config.ConfigOptions;
 import com.github.dcysteine.nesql.exporter.plugin.EntityFactory;
@@ -10,10 +13,9 @@ import com.github.dcysteine.nesql.exporter.util.IdPrefixUtil;
 import com.github.dcysteine.nesql.exporter.util.IdUtil;
 import com.github.dcysteine.nesql.exporter.util.StringUtil;
 import com.github.dcysteine.nesql.sql.base.fluid.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 public class FluidFactory extends EntityFactory<Fluid, String> {
+
     public FluidFactory(PluginExporter exporter) {
         super(exporter);
     }
@@ -42,28 +44,34 @@ public class FluidFactory extends EntityFactory<Fluid, String> {
         }
 
         fluid = new Fluid(
-                id,
-                StringUtil.formatFilePath(IdUtil.imageFilePath(fluidStack)),
-                modId,
-                internalName,
-                fluidStack.getUnlocalizedName(),
-                fluidStack.getLocalizedName(),
-                fluidStack.getFluidID(),
-                nbt,
-                fluidStack.getFluid().getLuminosity(fluidStack),
-                fluidStack.getFluid().getDensity(fluidStack),
-                fluidStack.getFluid().getTemperature(fluidStack),
-                fluidStack.getFluid().getViscosity(fluidStack),
-                fluidStack.getFluid().isGaseous(fluidStack));
+            id,
+            StringUtil.formatFilePath(IdUtil.imageFilePath(fluidStack)),
+            modId,
+            internalName,
+            fluidStack.getUnlocalizedName(),
+            fluidStack.getLocalizedName(),
+            fluidStack.getFluidID(),
+            nbt,
+            fluidStack.getFluid()
+                .getLuminosity(fluidStack),
+            fluidStack.getFluid()
+                .getDensity(fluidStack),
+            fluidStack.getFluid()
+                .getTemperature(fluidStack),
+            fluidStack.getFluid()
+                .getViscosity(fluidStack),
+            fluidStack.getFluid()
+                .isGaseous(fluidStack));
 
-        if (fluidStack.getFluid().getIcon() == null) {
+        if (fluidStack.getFluid()
+            .getIcon() == null) {
             logger.error("Found fluid with null icon: {}", fluid.getLocalizedName());
         } else {
             if (ConfigOptions.RENDER_ICONS.get()) {
                 Logger.intermittentLog(
-                        logger,
-                        "Enqueueing render of fluid #{}: " + fluid.getLocalizedName(),
-                        exporterState.incrementFluidCount());
+                    logger,
+                    "Enqueueing render of fluid #{}: " + fluid.getLocalizedName(),
+                    exporterState.incrementFluidCount());
                 RenderDispatcher.INSTANCE.addJob(RenderJob.ofFluid(fluidStack));
             }
         }

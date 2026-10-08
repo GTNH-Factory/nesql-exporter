@@ -1,16 +1,18 @@
 package com.github.dcysteine.nesql.exporter.main.config;
 
-import com.github.dcysteine.nesql.exporter.main.Logger;
-import cpw.mods.fml.relauncher.FMLInjectionData;
-import net.minecraftforge.common.config.Configuration;
-
 import java.io.File;
 
+import net.minecraftforge.common.config.Configuration;
+
+import com.github.dcysteine.nesql.exporter.main.Logger;
+
+import cpw.mods.fml.relauncher.FMLInjectionData;
+
 public final class Config {
-    static final File CONFIG_FILE =
-            new File(
-                    (File) FMLInjectionData.data()[6],
-                    "config" + File.separator + "NESQL-Exporter.cfg");
+
+    static final File CONFIG_FILE = new File(
+        (File) FMLInjectionData.data()[6],
+        "config" + File.separator + "NESQL-Exporter.cfg");
     static final Configuration CONFIG = new Configuration(CONFIG_FILE);
 
     // Static class.
@@ -18,7 +20,8 @@ public final class Config {
 
     /** This method is only intended to be called during mod initialization. */
     public static void initialize() {
-        ConfigOptions.getAllOptions().forEach(ConfigOptions.Option::initialize);
+        ConfigOptions.getAllOptions()
+            .forEach(ConfigOptions.Option::initialize);
         ConfigOptions.setCategoryComments();
     }
 

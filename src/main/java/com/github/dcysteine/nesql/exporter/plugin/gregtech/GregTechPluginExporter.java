@@ -7,6 +7,7 @@ import com.github.dcysteine.nesql.sql.Plugin;
 
 /** Plugin which exports GT5 recipes. */
 public class GregTechPluginExporter extends PluginExporter {
+
     private final GregTechRecipeTypeHandler recipeTypeHandler;
 
     public GregTechPluginExporter(Plugin plugin, ExporterState exporterState) {

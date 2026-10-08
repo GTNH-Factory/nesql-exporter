@@ -1,21 +1,27 @@
 package com.github.dcysteine.nesql.sql.base.item;
 
-import com.github.dcysteine.nesql.sql.Identifiable;
-import com.github.dcysteine.nesql.sql.Metadata;
-import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+
+import com.github.dcysteine.nesql.sql.Identifiable;
+import com.github.dcysteine.nesql.sql.Metadata;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OrderColumn;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 @Entity
 @EqualsAndHashCode
 @Getter
 @ToString
 public class Item implements Identifiable<String> {
+
     /**
      * This is the unique table key, NOT the Minecraft item ID! The latter is not unique (there can
      * be multiple item rows for the same Minecraft item ID).
@@ -62,20 +68,9 @@ public class Item implements Identifiable<String> {
     /** Needed by Hibernate. */
     protected Item() {}
 
-    public Item(
-            String id,
-            String imageFilePath,
-            String modId,
-            String internalName,
-            String unlocalizedName,
-            String localizedName,
-            int itemId,
-            int itemDamage,
-            String nbt,
-            List<String> tooltip,
-            int maxStackSize,
-            int maxDamage,
-            Map<String, Integer> toolClasses) {
+    public Item(String id, String imageFilePath, String modId, String internalName, String unlocalizedName,
+        String localizedName, int itemId, int itemDamage, String nbt, List<String> tooltip, int maxStackSize,
+        int maxDamage, Map<String, Integer> toolClasses) {
         this.id = id;
         this.imageFilePath = imageFilePath;
         this.modId = modId;
@@ -99,11 +94,11 @@ public class Item implements Identifiable<String> {
     public int compareTo(Identifiable<String> other) {
         if (other instanceof Item) {
             return Comparator.comparing(Item::getModId)
-                    .thenComparing(Item::getInternalName)
-                    .thenComparing(Item::getItemDamage)
-                    .thenComparing(Item::getNbt, Comparator.naturalOrder())
-                    .thenComparing(Item::getId)
-                    .compare(this, (Item) other);
+                .thenComparing(Item::getInternalName)
+                .thenComparing(Item::getItemDamage)
+                .thenComparing(Item::getNbt, Comparator.naturalOrder())
+                .thenComparing(Item::getId)
+                .compare(this, (Item) other);
         } else {
             return Identifiable.super.compareTo(other);
         }

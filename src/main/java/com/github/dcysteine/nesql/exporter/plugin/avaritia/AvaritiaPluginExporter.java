@@ -6,6 +6,7 @@ import com.github.dcysteine.nesql.sql.Plugin;
 
 /** Plugin which exports Avaritia recipes. */
 public class AvaritiaPluginExporter extends PluginExporter {
+
     private final AvaritiaRecipeTypeHandler recipeTypeHandler;
 
     public AvaritiaPluginExporter(Plugin plugin, ExporterState exporterState) {

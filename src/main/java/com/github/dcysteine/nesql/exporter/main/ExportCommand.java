@@ -1,12 +1,13 @@
 package com.github.dcysteine.nesql.exporter.main;
 
+import java.util.List;
+
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 
-import java.util.List;
-
 /** Command to run NESQL export. */
 final class ExportCommand implements ICommand {
+
     @Override
     public String getCommandName() {
         return "nesql";
@@ -58,7 +59,8 @@ final class ExportCommand implements ICommand {
     @Override
     public int compareTo(Object other) {
         if (other instanceof ICommand) {
-            return this.getCommandName().compareTo(((ICommand) other).getCommandName());
+            return this.getCommandName()
+                .compareTo(((ICommand) other).getCommandName());
         }
 
         return 0;

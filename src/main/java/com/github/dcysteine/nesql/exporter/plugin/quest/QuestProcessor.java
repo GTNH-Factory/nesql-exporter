@@ -1,18 +1,20 @@
 package com.github.dcysteine.nesql.exporter.plugin.quest;
 
-import betterquesting.api.questing.IQuest;
-import betterquesting.questing.QuestDatabase;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
 import com.github.dcysteine.nesql.exporter.main.Logger;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.PluginHelper;
 import com.github.dcysteine.nesql.exporter.plugin.quest.factory.QuestFactory;
 import com.github.dcysteine.nesql.sql.quest.Quest;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import betterquesting.api.questing.IQuest;
+import betterquesting.questing.QuestDatabase;
 
 public class QuestProcessor extends PluginHelper {
+
     public QuestProcessor(PluginExporter exporter) {
         super(exporter);
     }

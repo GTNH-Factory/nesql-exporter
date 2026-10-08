@@ -1,13 +1,14 @@
 package com.github.dcysteine.nesql.exporter.plugin.mobsinfo;
 
+import java.util.Map;
+
 import com.github.dcysteine.nesql.exporter.main.Logger;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.PluginHelper;
 import com.kuba6000.mobsinfo.loader.MobRecipeLoader;
 
-import java.util.Map;
-
 public class MobsInfoProcessor extends PluginHelper {
+
     public MobsInfoProcessor(PluginExporter exporter) {
         super(exporter);
     }

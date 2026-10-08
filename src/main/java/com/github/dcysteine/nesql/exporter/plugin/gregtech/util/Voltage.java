@@ -1,18 +1,20 @@
 package com.github.dcysteine.nesql.exporter.plugin.gregtech.util;
 
-import com.google.common.collect.ImmutableMap;
-import gregtech.api.enums.GTValues;
-import gregtech.api.util.GTUtility;
-
 import java.util.Arrays;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import com.google.common.collect.ImmutableMap;
+
+import gregtech.api.enums.GTValues;
+import gregtech.api.util.GTUtility;
 
 /**
  * Enum holding valid GregTech voltages. This will need to be manually updated, should we ever add
  * any voltage tiers.
  */
 public enum Voltage {
+
     ULV(0),
     LV(1),
     MV(2),
@@ -27,8 +29,7 @@ public enum Voltage {
     UIV(11),
     UMV(12),
     UXV(13),
-    MAX(14),
-    ;
+    MAX(14),;
 
     private final int index;
     private final String name;
@@ -38,11 +39,9 @@ public enum Voltage {
         this.name = GTValues.VN[index];
     }
 
-    private static final ImmutableMap<Integer, Voltage> VOLTAGE_MAP =
-            ImmutableMap.copyOf(
-                    Arrays.stream(values())
-                            .collect(Collectors.toMap(Voltage::getIndex, Function.identity())));
-
+    private static final ImmutableMap<Integer, Voltage> VOLTAGE_MAP = ImmutableMap.copyOf(
+        Arrays.stream(values())
+            .collect(Collectors.toMap(Voltage::getIndex, Function.identity())));
 
     public static Voltage getVoltage(int index) {
         return VOLTAGE_MAP.get(index);

@@ -1,5 +1,8 @@
 package com.github.dcysteine.nesql.exporter.util;
 
+import java.util.Map;
+import java.util.Set;
+
 import com.github.dcysteine.nesql.exporter.proto.FluidGroupPb;
 import com.github.dcysteine.nesql.exporter.proto.FluidStackPb;
 import com.github.dcysteine.nesql.exporter.proto.FluidStackWithProbabilityPb;
@@ -18,96 +21,89 @@ import com.github.dcysteine.nesql.sql.base.item.ItemStack;
 import com.github.dcysteine.nesql.sql.base.item.ItemStackWithProbability;
 import com.github.dcysteine.nesql.sql.base.recipe.RecipeType;
 
-import java.util.Map;
-import java.util.Set;
-
 /** Contains shared methods for building protos. */
 public final class ProtoBuilder {
+
     // Static class.
     private ProtoBuilder() {}
 
-    public static RecipePb buildRecipePb(
-            RecipeType recipeType,
-            Map<Integer, ItemGroup> itemInputs,
-            Map<Integer, FluidGroup> fluidInputs,
-            Map<Integer, ItemStackWithProbability> itemOutputs,
-            Map<Integer, FluidStackWithProbability> fluidOutputs) {
-        RecipePb.Builder builder =
-                RecipePb.newBuilder().setRecipeType(buildRecipeTypePb(recipeType));
+    public static RecipePb buildRecipePb(RecipeType recipeType, Map<Integer, ItemGroup> itemInputs,
+        Map<Integer, FluidGroup> fluidInputs, Map<Integer, ItemStackWithProbability> itemOutputs,
+        Map<Integer, FluidStackWithProbability> fluidOutputs) {
+        RecipePb.Builder builder = RecipePb.newBuilder()
+            .setRecipeType(buildRecipeTypePb(recipeType));
         itemInputs.forEach((key, value) -> builder.putItemInput(key, buildItemGroupPb(value)));
         fluidInputs.forEach((key, value) -> builder.putFluidInput(key, buildFluidGroupPb(value)));
-        itemOutputs.forEach(
-                (key, value) -> builder.putItemOutput(key, buildItemStackWithProbabilityPb(value)));
-        fluidOutputs.forEach(
-                (key, value) ->
-                        builder.putFluidOutput(key, buildFluidStackWithProbabilityPb(value)));
+        itemOutputs.forEach((key, value) -> builder.putItemOutput(key, buildItemStackWithProbabilityPb(value)));
+        fluidOutputs.forEach((key, value) -> builder.putFluidOutput(key, buildFluidStackWithProbabilityPb(value)));
         return builder.build();
     }
 
     public static RecipeTypePb buildRecipeTypePb(RecipeType recipeType) {
         return RecipeTypePb.newBuilder()
-                .setCategory(recipeType.getCategory())
-                .setType(recipeType.getType())
-                .build();
+            .setCategory(recipeType.getCategory())
+            .setType(recipeType.getType())
+            .build();
     }
 
     public static ItemGroupPb buildItemGroupPb(Set<ItemStack> itemStacks) {
         ItemGroupPb.Builder builder = ItemGroupPb.newBuilder();
         itemStacks.stream()
-                .sorted()
-                .forEach(itemStack -> builder.addItemStack(buildItemStackPb(itemStack)));
+            .sorted()
+            .forEach(itemStack -> builder.addItemStack(buildItemStackPb(itemStack)));
         return builder.build();
     }
 
     public static ItemGroupPb buildItemGroupPb(ItemGroup itemGroup) {
         ItemGroupPb.Builder builder = ItemGroupPb.newBuilder();
-        itemGroup.getItemStacks().stream()
-                .sorted()
-                .map(ProtoBuilder::buildItemStackPb)
-                .forEach(builder::addItemStack);
+        itemGroup.getItemStacks()
+            .stream()
+            .sorted()
+            .map(ProtoBuilder::buildItemStackPb)
+            .forEach(builder::addItemStack);
         return builder.build();
     }
 
     public static FluidGroupPb buildFluidGroupPb(Set<FluidStack> fluidStacks) {
         FluidGroupPb.Builder builder = FluidGroupPb.newBuilder();
         fluidStacks.stream()
-                .sorted()
-                .map(ProtoBuilder::buildFluidStackPb)
-                .forEach(builder::addFluidStack);
+            .sorted()
+            .map(ProtoBuilder::buildFluidStackPb)
+            .forEach(builder::addFluidStack);
         return builder.build();
     }
 
     public static FluidGroupPb buildFluidGroupPb(FluidGroup fluidGroup) {
         FluidGroupPb.Builder builder = FluidGroupPb.newBuilder();
-        fluidGroup.getFluidStacks().stream()
-                .sorted()
-                .map(ProtoBuilder::buildFluidStackPb)
-                .forEach(builder::addFluidStack);
+        fluidGroup.getFluidStacks()
+            .stream()
+            .sorted()
+            .map(ProtoBuilder::buildFluidStackPb)
+            .forEach(builder::addFluidStack);
         return builder.build();
     }
 
     public static ItemStackPb buildItemStackPb(ItemStack itemStack) {
         Item item = itemStack.getItem();
         ItemStackPb.Builder builder = ItemStackPb.newBuilder()
-                .setModId(item.getModId())
-                .setInternalName(item.getInternalName())
-                .setDamage(item.getItemDamage())
-                .setStackSize(itemStack.getStackSize());
+            .setModId(item.getModId())
+            .setInternalName(item.getInternalName())
+            .setDamage(item.getItemDamage())
+            .setStackSize(itemStack.getStackSize());
         if (item.hasNbt()) {
             builder.setNbt(item.getNbt());
         }
         return builder.build();
     }
 
-    public static ItemStackWithProbabilityPb buildItemStackWithProbabilityPb(
-            ItemStackWithProbability itemStack) {
+    public static ItemStackWithProbabilityPb buildItemStackWithProbabilityPb(ItemStackWithProbability itemStack) {
         Item item = itemStack.getItem();
         ItemStackWithProbabilityPb.Builder builder = ItemStackWithProbabilityPb.newBuilder()
-                .setModId(item.getModId())
-                .setInternalName(item.getInternalName())
-                .setDamage(item.getItemDamage())
-                .setStackSize(itemStack.getStackSize())
-                .setProbability(itemStack.getProbability());
+            .setModId(item.getModId())
+            .setInternalName(item.getInternalName())
+            .setDamage(item.getItemDamage())
+            .setStackSize(itemStack.getStackSize())
+            .setProbability(itemStack.getProbability());
         if (item.hasNbt()) {
             builder.setNbt(item.getNbt());
         }
@@ -117,23 +113,22 @@ public final class ProtoBuilder {
     public static FluidStackPb buildFluidStackPb(FluidStack fluidStack) {
         Fluid fluid = fluidStack.getFluid();
         FluidStackPb.Builder builder = FluidStackPb.newBuilder()
-                .setModId(fluid.getModId())
-                .setInternalName(fluid.getInternalName())
-                .setAmount(fluidStack.getAmount());
+            .setModId(fluid.getModId())
+            .setInternalName(fluid.getInternalName())
+            .setAmount(fluidStack.getAmount());
         if (fluid.hasNbt()) {
             builder.setNbt(fluid.getNbt());
         }
         return builder.build();
     }
 
-    public static FluidStackWithProbabilityPb buildFluidStackWithProbabilityPb(
-            FluidStackWithProbability fluidStack) {
+    public static FluidStackWithProbabilityPb buildFluidStackWithProbabilityPb(FluidStackWithProbability fluidStack) {
         Fluid fluid = fluidStack.getFluid();
         FluidStackWithProbabilityPb.Builder builder = FluidStackWithProbabilityPb.newBuilder()
-                .setModId(fluid.getModId())
-                .setInternalName(fluid.getInternalName())
-                .setAmount(fluidStack.getAmount())
-                .setProbability(fluidStack.getProbability());
+            .setModId(fluid.getModId())
+            .setInternalName(fluid.getInternalName())
+            .setAmount(fluidStack.getAmount())
+            .setProbability(fluidStack.getProbability());
         if (fluid.hasNbt()) {
             builder.setNbt(fluid.getNbt());
         }

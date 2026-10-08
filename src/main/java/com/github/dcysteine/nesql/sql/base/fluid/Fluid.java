@@ -1,7 +1,10 @@
 package com.github.dcysteine.nesql.sql.base.fluid;
 
+import java.util.Comparator;
+
 import com.github.dcysteine.nesql.sql.Identifiable;
 import com.github.dcysteine.nesql.sql.Metadata;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,13 +12,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Comparator;
-
 @Entity
 @EqualsAndHashCode
 @Getter
 @ToString
 public class Fluid implements Identifiable<String> {
+
     /**
      * This is the unique table key, NOT the Forge fluid ID! The latter is not unique (there can be
      * multiple fluid rows for the same Forge fluid ID).
@@ -54,20 +56,9 @@ public class Fluid implements Identifiable<String> {
     /** Needed by Hibernate. */
     protected Fluid() {}
 
-    public Fluid(
-            String id,
-            String imageFilePath,
-            String modId,
-            String internalName,
-            String unlocalizedName,
-            String localizedName,
-            int fluidId,
-            String nbt,
-            int luminosity,
-            int density,
-            int temperature,
-            int viscosity,
-            boolean gaseous) {
+    public Fluid(String id, String imageFilePath, String modId, String internalName, String unlocalizedName,
+        String localizedName, int fluidId, String nbt, int luminosity, int density, int temperature, int viscosity,
+        boolean gaseous) {
         this.id = id;
         this.imageFilePath = imageFilePath;
         this.modId = modId;
@@ -91,10 +82,10 @@ public class Fluid implements Identifiable<String> {
     public int compareTo(Identifiable<String> other) {
         if (other instanceof Fluid) {
             return Comparator.comparing(Fluid::getModId)
-                    .thenComparing(Fluid::getInternalName)
-                    .thenComparing(Fluid::getNbt, Comparator.naturalOrder())
-                    .thenComparing(Fluid::getId)
-                    .compare(this, (Fluid) other);
+                .thenComparing(Fluid::getInternalName)
+                .thenComparing(Fluid::getNbt, Comparator.naturalOrder())
+                .thenComparing(Fluid::getId)
+                .compare(this, (Fluid) other);
         } else {
             return Identifiable.super.compareTo(other);
         }

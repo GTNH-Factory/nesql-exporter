@@ -1,9 +1,15 @@
 package com.github.dcysteine.nesql.sql.quest;
 
+import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import com.github.dcysteine.nesql.sql.Identifiable;
 import com.github.dcysteine.nesql.sql.base.fluid.FluidStack;
 import com.github.dcysteine.nesql.sql.base.item.ItemGroup;
 import com.github.dcysteine.nesql.sql.base.mob.Mob;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -17,20 +23,18 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-
 /**
  * This class contains data for the various types of BetterQuesting tasks.
  *
- * <p>Each field will only be set for certain task types. See {@link TaskType} for details.
+ * <p>
+ * Each field will only be set for certain task types. See {@link TaskType} for details.
  */
 @Entity
 @EqualsAndHashCode
 @Getter
 @ToString
 public class Task implements Identifiable<String> {
+
     @Id
     @Column(nullable = false)
     private String id;
@@ -65,10 +69,8 @@ public class Task implements Identifiable<String> {
     /** Needed by Hibernate. */
     protected Task() {}
 
-    public Task(
-            String id, String name, TaskType type,
-            List<ItemGroup> items, List<FluidStack> fluids,
-            boolean consume, @Nullable Mob mob, int numberRequired, String dimensionName) {
+    public Task(String id, String name, TaskType type, List<ItemGroup> items, List<FluidStack> fluids, boolean consume,
+        @Nullable Mob mob, int numberRequired, String dimensionName) {
         this.id = id;
         this.name = name;
         this.type = type;

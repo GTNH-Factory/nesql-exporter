@@ -1,5 +1,12 @@
 package com.github.dcysteine.nesql.exporter.plugin.base.factory;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
+
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.PluginHelper;
 import com.github.dcysteine.nesql.sql.base.fluid.FluidGroup;
@@ -9,15 +16,9 @@ import com.github.dcysteine.nesql.sql.base.item.ItemStackWithProbability;
 import com.github.dcysteine.nesql.sql.base.recipe.Recipe;
 import com.github.dcysteine.nesql.sql.base.recipe.RecipeType;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Stream;
-
 /** Helper class that builds {@link Recipe} instances. */
 public class RecipeBuilder extends PluginHelper {
+
     private final ItemFactory itemFactory;
     private final FluidFactory fluidFactory;
     private final ItemGroupFactory itemGroupFactory;
@@ -68,13 +69,15 @@ public class RecipeBuilder extends PluginHelper {
 
     /** Adds each item in {@code inputs} into a separate input slot. */
     public RecipeBuilder addAllItemInput(net.minecraft.item.ItemStack[] inputs) {
-        Stream.of(inputs).forEach(this::addItemInput);
+        Stream.of(inputs)
+            .forEach(this::addItemInput);
         return this;
     }
 
     /** Adds all items in {@code inputs} into a single input slot, as an item group. */
     public RecipeBuilder addItemGroupInput(Collection<net.minecraft.item.ItemStack> inputs) {
-        if (inputs.stream().allMatch(Objects::isNull)) {
+        if (inputs.stream()
+            .allMatch(Objects::isNull)) {
             return skipItemInput();
         }
 
@@ -109,14 +112,15 @@ public class RecipeBuilder extends PluginHelper {
 
     /** Adds each item in {@code inputs} into a separate input slot. */
     public RecipeBuilder addAllFluidInput(net.minecraftforge.fluids.FluidStack[] inputs) {
-        Stream.of(inputs).forEach(this::addFluidInput);
+        Stream.of(inputs)
+            .forEach(this::addFluidInput);
         return this;
     }
 
     /** Adds all fluids in {@code inputs} into a single input slot, as a fluid group. */
-    public RecipeBuilder addFluidGroupInput(
-            Collection<net.minecraftforge.fluids.FluidStack> inputs) {
-        if (inputs.stream().allMatch(Objects::isNull)) {
+    public RecipeBuilder addFluidGroupInput(Collection<net.minecraftforge.fluids.FluidStack> inputs) {
+        if (inputs.stream()
+            .allMatch(Objects::isNull)) {
             return skipFluidInput();
         }
 
@@ -157,7 +161,8 @@ public class RecipeBuilder extends PluginHelper {
     }
 
     public RecipeBuilder addAllItemOutput(net.minecraft.item.ItemStack[] outputs) {
-        Stream.of(outputs).forEach(this::addItemOutput);
+        Stream.of(outputs)
+            .forEach(this::addItemOutput);
         return this;
     }
 
@@ -170,8 +175,7 @@ public class RecipeBuilder extends PluginHelper {
         return this;
     }
 
-    public RecipeBuilder addFluidOutput(
-            net.minecraftforge.fluids.FluidStack output, double probability) {
+    public RecipeBuilder addFluidOutput(net.minecraftforge.fluids.FluidStack output, double probability) {
         if (output == null) {
             return skipFluidOutput();
         }
@@ -190,7 +194,8 @@ public class RecipeBuilder extends PluginHelper {
     }
 
     public RecipeBuilder addAllFluidOutput(net.minecraftforge.fluids.FluidStack[] outputs) {
-        Stream.of(outputs).forEach(this::addFluidOutput);
+        Stream.of(outputs)
+            .forEach(this::addFluidOutput);
         return this;
     }
 
@@ -204,19 +209,16 @@ public class RecipeBuilder extends PluginHelper {
     }
 
     public Recipe build() {
-        return recipeFactory.get(
-                recipeType, itemInputs, fluidInputs, itemOutputs, fluidOutputs);
+        return recipeFactory.get(recipeType, itemInputs, fluidInputs, itemOutputs, fluidOutputs);
     }
 
-    private ItemStackWithProbability buildItemStackWithProbability(
-            net.minecraft.item.ItemStack itemStack, double probability) {
-        return new ItemStackWithProbability(
-                itemFactory.get(itemStack), itemStack.stackSize, probability);
+    private ItemStackWithProbability buildItemStackWithProbability(net.minecraft.item.ItemStack itemStack,
+        double probability) {
+        return new ItemStackWithProbability(itemFactory.get(itemStack), itemStack.stackSize, probability);
     }
 
-    private FluidStackWithProbability buildFluidStackWithProbability(
-            net.minecraftforge.fluids.FluidStack fluidStack, double probability) {
-        return new FluidStackWithProbability(
-                fluidFactory.get(fluidStack), fluidStack.amount, probability);
+    private FluidStackWithProbability buildFluidStackWithProbability(net.minecraftforge.fluids.FluidStack fluidStack,
+        double probability) {
+        return new FluidStackWithProbability(fluidFactory.get(fluidStack), fluidStack.amount, probability);
     }
 }

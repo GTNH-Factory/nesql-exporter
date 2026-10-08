@@ -1,10 +1,11 @@
 package com.github.dcysteine.nesql.exporter.render;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.github.dcysteine.nesql.exporter.common.MobSpec;
 import com.github.dcysteine.nesql.exporter.util.IdUtil;
 import com.google.auto.value.AutoOneOf;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 /**
  * Note: this class doesn't quite conform to the {@link AutoOneOf} contract, as some of its contents
@@ -12,8 +13,11 @@ import net.minecraftforge.fluids.FluidStack;
  */
 @AutoOneOf(RenderJob.JobType.class)
 public abstract class RenderJob {
+
     public enum JobType {
-        ITEM, FLUID, MOB
+        ITEM,
+        FLUID,
+        MOB
     }
 
     public static RenderJob ofItem(ItemStack itemStack) {
@@ -31,8 +35,11 @@ public abstract class RenderJob {
     }
 
     public abstract JobType getType();
+
     public abstract ItemStack getItem();
+
     public abstract FluidStack getFluid();
+
     public abstract MobSpec getMob();
 
     public Renderer.RenderTarget getRenderTarget() {

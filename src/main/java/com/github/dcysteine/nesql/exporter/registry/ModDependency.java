@@ -4,6 +4,7 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 
 public enum ModDependency {
+
     MOBS_INFO("mobsinfo"),
 
     AVARITIA("Avaritia"),
@@ -11,6 +12,7 @@ public enum ModDependency {
 
     // GregTech 5 shares a mod ID with GregTech 6, so we must also check the mod version.
     GREGTECH_5("gregtech") {
+
         @Override
         public boolean isLoaded() {
             if (super.isLoaded()) {
@@ -23,8 +25,7 @@ public enum ModDependency {
 
     THAUMCRAFT("Thaumcraft"),
     ASPECT_RECIPE_INDEX("aspectrecipeindex"),
-    BETTER_QUESTING("betterquesting"),
-    ;
+    BETTER_QUESTING("betterquesting"),;
 
     public final String modId;
 
@@ -41,6 +42,8 @@ public enum ModDependency {
     }
 
     public ModContainer getMod() {
-        return Loader.instance().getIndexedModList().get(modId);
+        return Loader.instance()
+            .getIndexedModList()
+            .get(modId);
     }
 }

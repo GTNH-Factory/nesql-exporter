@@ -1,5 +1,11 @@
 package com.github.dcysteine.nesql.exporter.plugin.forge.processor;
 
+import java.util.Map;
+import java.util.Optional;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
+
 import com.github.dcysteine.nesql.exporter.main.Logger;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.PluginHelper;
@@ -9,13 +15,9 @@ import com.github.dcysteine.nesql.exporter.plugin.forge.factory.FluidBlockFactor
 import com.github.dcysteine.nesql.exporter.util.ItemUtil;
 import com.github.dcysteine.nesql.sql.base.fluid.Fluid;
 import com.github.dcysteine.nesql.sql.base.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidRegistry;
-
-import java.util.Map;
-import java.util.Optional;
 
 public class FluidProcessor extends PluginHelper {
+
     public FluidProcessor(PluginExporter exporter) {
         super(exporter);
     }

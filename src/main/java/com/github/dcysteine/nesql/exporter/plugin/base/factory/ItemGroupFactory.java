@@ -1,6 +1,11 @@
 package com.github.dcysteine.nesql.exporter.plugin.base.factory;
 
-import codechicken.nei.ItemList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import com.github.dcysteine.nesql.exporter.plugin.EntityFactory;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.proto.ItemGroupPb;
@@ -12,13 +17,10 @@ import com.github.dcysteine.nesql.sql.base.item.ItemGroup;
 import com.github.dcysteine.nesql.sql.base.item.ItemStack;
 import com.google.common.collect.ImmutableList;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import codechicken.nei.ItemList;
 
 public class ItemGroupFactory extends EntityFactory<ItemGroup, String> {
+
     private final ItemFactory itemFactory;
 
     public ItemGroupFactory(PluginExporter exporter) {
@@ -39,8 +41,7 @@ public class ItemGroupFactory extends EntityFactory<ItemGroup, String> {
      * This is needed by things like BetterQuesting's {@code BigItemStack},
      * which has stack size larger than is supported by Minecraft's {@code ItemStack}.
      */
-    public ItemGroup get(
-            Collection<net.minecraft.item.ItemStack> itemStack, int overrideStackSize) {
+    public ItemGroup get(Collection<net.minecraft.item.ItemStack> itemStack, int overrideStackSize) {
         return get(itemStack, Optional.of(overrideStackSize));
     }
 
@@ -48,13 +49,12 @@ public class ItemGroupFactory extends EntityFactory<ItemGroup, String> {
      * Pass in a non-empty optional for {@code overrideStackSize} to override all stack sizes to the
      * given value.
      *
-     * <p>Overriding the stack size is needed to support things like BetterQuesting's
+     * <p>
+     * Overriding the stack size is needed to support things like BetterQuesting's
      * {@code BigItemStack}, which has stack size larger than is supported by Minecraft's
      * {@code ItemStack}.
      */
-    public ItemGroup get(
-            Collection<net.minecraft.item.ItemStack> itemStacks,
-            Optional<Integer> overrideStackSize) {
+    public ItemGroup get(Collection<net.minecraft.item.ItemStack> itemStacks, Optional<Integer> overrideStackSize) {
         Set<ItemStack> itemStackEntities = new HashSet<>();
         for (net.minecraft.item.ItemStack itemStack : itemStacks) {
             if (itemStack == null) {
@@ -63,13 +63,12 @@ public class ItemGroupFactory extends EntityFactory<ItemGroup, String> {
 
             int stackSize = overrideStackSize.orElse(itemStack.stackSize);
             if (ItemUtil.hasWildcardItemDamage(itemStack)) {
-                List<net.minecraft.item.ItemStack> permutations =
-                        ItemList.itemMap.get(itemStack.getItem());
+                List<net.minecraft.item.ItemStack> permutations = ItemList.itemMap.get(itemStack.getItem());
                 if (!permutations.isEmpty()) {
                     permutations.stream()
-                            .map(itemFactory::get)
-                            .map(item -> new ItemStack(item, stackSize))
-                            .forEach(itemStackEntities::add);
+                        .map(itemFactory::get)
+                        .map(item -> new ItemStack(item, stackSize))
+                        .forEach(itemStackEntities::add);
                 } else {
                     net.minecraft.item.ItemStack baseItemStack = itemStack.copy();
                     baseItemStack.setItemDamage(0);

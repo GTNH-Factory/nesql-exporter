@@ -1,24 +1,27 @@
 package com.github.dcysteine.nesql.exporter.main.config;
 
-import com.github.dcysteine.nesql.exporter.main.Main;
-import cpw.mods.fml.client.config.GuiConfig;
-import cpw.mods.fml.client.config.IConfigElement;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.common.config.ConfigElement;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.common.config.ConfigElement;
+
+import com.github.dcysteine.nesql.exporter.main.Main;
+
+import cpw.mods.fml.client.config.GuiConfig;
+import cpw.mods.fml.client.config.IConfigElement;
+
 public final class ConfigGui extends GuiConfig {
+
     public ConfigGui(GuiScreen parent) {
         super(
-                parent,
-                getConfigOptions(),
-                Main.MOD_ID,
-                false,
-                false,
-                GuiConfig.getAbridgedConfigPath(Config.getConfigFilePath()),
-                Main.MOD_NAME);
+            parent,
+            getConfigOptions(),
+            Main.MOD_ID,
+            false,
+            false,
+            GuiConfig.getAbridgedConfigPath(Config.getConfigFilePath()),
+            Main.MOD_NAME);
     }
 
     @Override
@@ -29,8 +32,9 @@ public final class ConfigGui extends GuiConfig {
 
     @SuppressWarnings("rawtypes")
     private static List<IConfigElement> getConfigOptions() {
-        return ConfigOptions.getAllOptions().stream()
-                .map(option -> new ConfigElement(option.getProperty()))
-                .collect(Collectors.toList());
+        return ConfigOptions.getAllOptions()
+            .stream()
+            .map(option -> new ConfigElement(option.getProperty()))
+            .collect(Collectors.toList());
     }
 }

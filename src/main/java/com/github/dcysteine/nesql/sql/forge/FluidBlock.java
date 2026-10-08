@@ -3,6 +3,7 @@ package com.github.dcysteine.nesql.sql.forge;
 import com.github.dcysteine.nesql.sql.Identifiable;
 import com.github.dcysteine.nesql.sql.base.fluid.Fluid;
 import com.github.dcysteine.nesql.sql.base.item.Item;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -17,6 +18,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class FluidBlock implements Identifiable<String> {
+
     @Id
     @Column(nullable = false)
     private String id;

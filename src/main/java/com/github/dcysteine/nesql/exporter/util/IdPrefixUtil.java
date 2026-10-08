@@ -1,12 +1,13 @@
 package com.github.dcysteine.nesql.exporter.util;
 
-import com.google.common.base.Joiner;
-
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.common.base.Joiner;
+
 /** Helper class for applying a unique prefix to all persisted entity IDs. */
 public enum IdPrefixUtil {
+
     ITEM("i"),
     FLUID("f"),
     ITEM_GROUP("ig"),
@@ -30,13 +31,13 @@ public enum IdPrefixUtil {
     QUEST("q"),
     QUEST_LINE("ql"),
     QUEST_TASK("qt"),
-    QUEST_REWARD("qr"),
-    ;
+    QUEST_REWARD("qr"),;
 
     private final String prefix;
 
     IdPrefixUtil(String... prefixParts) {
-        prefix = Joiner.on(IdUtil.ID_SEPARATOR).join(prefixParts) + IdUtil.ID_SEPARATOR;
+        prefix = Joiner.on(IdUtil.ID_SEPARATOR)
+            .join(prefixParts) + IdUtil.ID_SEPARATOR;
     }
 
     public String getPrefix() {
@@ -44,7 +45,8 @@ public enum IdPrefixUtil {
     }
 
     public String applyPrefix(String... idParts) {
-        return prefix + Joiner.on(IdUtil.ID_SEPARATOR).join(idParts);
+        return prefix + Joiner.on(IdUtil.ID_SEPARATOR)
+            .join(idParts);
     }
 
     static {

@@ -1,26 +1,31 @@
 package com.github.dcysteine.nesql.exporter.common;
 
-import com.github.dcysteine.nesql.exporter.main.Logger;
-import com.google.auto.value.AutoValue;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
+import com.github.dcysteine.nesql.exporter.main.Logger;
+import com.google.auto.value.AutoValue;
 
 /**
  * Contains the data needed to specify a mob, along with some convenience methods.
  *
- * <p>Well, really this specifies a Minecraft entity.
+ * <p>
+ * Well, really this specifies a Minecraft entity.
  * But we'll use the term "mob" because "entity" is already used to refer to SQL entities.
  *
- * <p>Note: this class doesn't quite conform to the {@link AutoValue} contract, as some of its
+ * <p>
+ * Note: this class doesn't quite conform to the {@link AutoValue} contract, as some of its
  * contents ({@link NBTTagCompound}) are mutable. Shouldn't matter for our limited use-case, though.
  */
 @AutoValue
 public abstract class MobSpec {
+
     public static MobSpec create(String mobName) {
         return create(mobName, null);
     }
@@ -51,8 +56,7 @@ public abstract class MobSpec {
 
     public Optional<Entity> createEntity() {
         try {
-            Entity entity =
-                    EntityList.createEntityByName(getFullName(), Minecraft.getMinecraft().theWorld);
+            Entity entity = EntityList.createEntityByName(getFullName(), Minecraft.getMinecraft().theWorld);
             if (entity == null) {
                 Logger.MOD.warn("Got null while creating entity: {}", this);
                 return Optional.empty();

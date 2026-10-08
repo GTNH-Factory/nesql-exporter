@@ -1,15 +1,19 @@
 package com.github.dcysteine.nesql.exporter.plugin.thaumcraft;
 
-import codechicken.nei.NEIServerUtils;
-import com.gtnewhorizons.aspectrecipeindex.ModItems;
-import com.gtnewhorizons.aspectrecipeindex.common.items.ItemAspect;
+import java.util.Arrays;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+
 import com.github.dcysteine.nesql.exporter.main.Logger;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.PluginHelper;
 import com.github.dcysteine.nesql.exporter.plugin.base.factory.RecipeBuilder;
 import com.github.dcysteine.nesql.sql.base.recipe.RecipeType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ShapedRecipes;
+import com.gtnewhorizons.aspectrecipeindex.ModItems;
+import com.gtnewhorizons.aspectrecipeindex.common.items.ItemAspect;
+
+import codechicken.nei.NEIServerUtils;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -17,22 +21,19 @@ import thaumcraft.api.crafting.CrucibleRecipe;
 import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.crafting.ShapedArcaneRecipe;
 import thaumcraft.api.crafting.ShapelessArcaneRecipe;
-import thaumcraft.common.config.ConfigResearch;
-import thaumcraft.common.lib.crafting.ShapelessNBTOreRecipe;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ThaumcraftRecipeProcessor extends PluginHelper {
+
     private final RecipeType shapedCrafting;
     private final RecipeType shapelessCrafting;
     private final RecipeType alchemyCrafting;
     private final RecipeType infusionCrafting;
+
     public ThaumcraftRecipeProcessor(PluginExporter exporter, ThaumcraftRecipeTypeHandler handler) {
         super(exporter);
         shapedCrafting = handler.getRecipeType(ThaumcraftRecipeTypeHandler.ThaumcraftRecipeType.MAGIC_CRAFTING_SHAPED);
-        shapelessCrafting = handler.getRecipeType(ThaumcraftRecipeTypeHandler.ThaumcraftRecipeType.MAGIC_CRAFTING_SHAPELESS);
+        shapelessCrafting = handler
+            .getRecipeType(ThaumcraftRecipeTypeHandler.ThaumcraftRecipeType.MAGIC_CRAFTING_SHAPELESS);
         alchemyCrafting = handler.getRecipeType(ThaumcraftRecipeTypeHandler.ThaumcraftRecipeType.ALCHEMY);
         infusionCrafting = handler.getRecipeType(ThaumcraftRecipeTypeHandler.ThaumcraftRecipeType.INFUSION);
     }
@@ -79,7 +80,8 @@ public class ThaumcraftRecipeProcessor extends PluginHelper {
             handleItemInput(builder, itemInput);
         }
         PrintAspects(builder, recipe.aspects, 9);
-        builder.addItemOutput(recipe.getRecipeOutput()).build();
+        builder.addItemOutput(recipe.getRecipeOutput())
+            .build();
     }
 
     private void processShapelessRecipe(ShapelessArcaneRecipe recipe) {
@@ -88,22 +90,25 @@ public class ThaumcraftRecipeProcessor extends PluginHelper {
             handleItemInput(builder, itemInput);
         }
         PrintAspects(builder, recipe.aspects, 9);
-        builder.addItemOutput(recipe.getRecipeOutput()).build();
+        builder.addItemOutput(recipe.getRecipeOutput())
+            .build();
     }
 
     private void processAlchemyRecipe(CrucibleRecipe recipe) {
         RecipeBuilder builder = new RecipeBuilder(exporter, alchemyCrafting);
         handleItemInput(builder, recipe.catalyst);
-        PrintAspects(builder, recipe.aspects, 9-recipe.aspects.size());
-        builder.addItemOutput(recipe.getRecipeOutput()).build();
+        PrintAspects(builder, recipe.aspects, 9 - recipe.aspects.size());
+        builder.addItemOutput(recipe.getRecipeOutput())
+            .build();
     }
 
-    private static final int[] componentFillOrder = new int[] {2, 22, 10, 14, 0, 24, 4, 20, 1, 23, 3, 21, 5, 19, 15, 9, 7, 17, 11, 13, 6, 18, 8, 16, 25, 26, 27, 28, 29, 30, 31, 32};
+    private static final int[] componentFillOrder = new int[] { 2, 22, 10, 14, 0, 24, 4, 20, 1, 23, 3, 21, 5, 19, 15, 9,
+        7, 17, 11, 13, 6, 18, 8, 16, 25, 26, 27, 28, 29, 30, 31, 32 };
 
     private void processInfusionRecipe(InfusionRecipe recipe) {
-        ItemStack output = recipe.getRecipeOutput() instanceof ItemStack ? (ItemStack) recipe.getRecipeOutput() : recipe.getRecipeInput();
-        if (output == null || output.getItem() == null)
-            return;
+        ItemStack output = recipe.getRecipeOutput() instanceof ItemStack ? (ItemStack) recipe.getRecipeOutput()
+            : recipe.getRecipeInput();
+        if (output == null || output.getItem() == null) return;
 
         RecipeBuilder builder = new RecipeBuilder(exporter, infusionCrafting);
         ItemStack[] fakeInputMap = new ItemStack[32];
@@ -114,7 +119,7 @@ public class ThaumcraftRecipeProcessor extends PluginHelper {
             fakeInputMap[componentFillOrder[componentId++]] = itemInput;
         }
 
-        for (int i = 0; i<32; i++) {
+        for (int i = 0; i < 32; i++) {
             if (fakeInputMap[i] != null) {
                 builder.itemInputsIndex = i;
                 builder.addItemInput(fakeInputMap[i]);
@@ -122,15 +127,13 @@ public class ThaumcraftRecipeProcessor extends PluginHelper {
         }
         PrintAspects(builder, recipe.getAspects(), 25);
 
-        builder.addItemOutput(output).build();
+        builder.addItemOutput(output)
+            .build();
     }
 
-    private void PrintAspects(RecipeBuilder builder, AspectList list, int index)
-    {
-        if (builder.itemInputsIndex < index)
-            builder.itemInputsIndex = index;
-        for (Aspect aspect : list.getAspectsSorted())
-        {
+    private void PrintAspects(RecipeBuilder builder, AspectList list, int index) {
+        if (builder.itemInputsIndex < index) builder.itemInputsIndex = index;
+        for (Aspect aspect : list.getAspectsSorted()) {
             ItemStack iconItemStack = new ItemStack(ModItems.itemAspect, list.getAmount(aspect), 0);
             ItemAspect.setAspect(iconItemStack, aspect);
             builder.addItemInput(iconItemStack);

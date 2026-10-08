@@ -1,5 +1,10 @@
 package com.github.dcysteine.nesql.exporter.registry;
 
+import static com.github.dcysteine.nesql.exporter.plugin.gregtech.util.GregTechRecipeMap.makeGTRecipe;
+
+import java.util.EnumMap;
+import java.util.Map;
+
 import com.github.dcysteine.nesql.exporter.plugin.ExporterState;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.avaritia.AvaritiaPluginExporter;
@@ -14,14 +19,9 @@ import com.github.dcysteine.nesql.exporter.plugin.thaumcraft.ThaumcraftPluginExp
 import com.github.dcysteine.nesql.sql.Plugin;
 import com.google.common.collect.ImmutableList;
 
-import java.util.EnumMap;
-import java.util.Map;
-
-import static com.github.dcysteine.nesql.exporter.plugin.gregtech.util.GregTechRecipeMap.makeGTRecipe;
-
-
 /** Registry of plugins. Register new plugins here! */
 public class PluginRegistry {
+
     private static final ImmutableList<RegistryEntry> entries;
 
     static {
@@ -33,23 +33,17 @@ public class PluginRegistry {
         builder.add(RegistryEntry.create(Plugin.NEI, NeiPluginExporter::new));
         builder.add(RegistryEntry.create(Plugin.FORGE, ForgePluginExporter::new));
         makeGTRecipe();
-        builder.add(
-                RegistryEntry.create(
-                        Plugin.MOBS_INFO, MobsInfoPluginExporter::new, ModDependency.MOBS_INFO));
+        builder.add(RegistryEntry.create(Plugin.MOBS_INFO, MobsInfoPluginExporter::new, ModDependency.MOBS_INFO));
 
+        builder.add(RegistryEntry.create(Plugin.AVARITIA, AvaritiaPluginExporter::new, ModDependency.AVARITIA));
+        builder.add(RegistryEntry.create(Plugin.GREGTECH, GregTechPluginExporter::new, ModDependency.GREGTECH_5));
         builder.add(
-                RegistryEntry.create(
-                        Plugin.AVARITIA, AvaritiaPluginExporter::new, ModDependency.AVARITIA));
-        builder.add(
-                RegistryEntry.create(
-                        Plugin.GREGTECH, GregTechPluginExporter::new, ModDependency.GREGTECH_5));
-        builder.add(
-                RegistryEntry.create(
-                        Plugin.THAUMCRAFT, ThaumcraftPluginExporter::new,
-                        ModDependency.THAUMCRAFT, ModDependency.ASPECT_RECIPE_INDEX));
-        builder.add(
-                RegistryEntry.create(
-                        Plugin.QUEST, QuestPluginExporter::new, ModDependency.BETTER_QUESTING));
+            RegistryEntry.create(
+                Plugin.THAUMCRAFT,
+                ThaumcraftPluginExporter::new,
+                ModDependency.THAUMCRAFT,
+                ModDependency.ASPECT_RECIPE_INDEX));
+        builder.add(RegistryEntry.create(Plugin.QUEST, QuestPluginExporter::new, ModDependency.BETTER_QUESTING));
 
         entries = builder.build();
     }
@@ -59,12 +53,9 @@ public class PluginRegistry {
     /** Constructs plugins whose dependencies are met. Returns a list of activated plugins. */
     public Map<Plugin, PluginExporter> initialize(ExporterState exporterState) {
         entries.stream()
-                .filter(RegistryEntry::areDependenciesSatisfied)
-                .filter(RegistryEntry::isEnabled)
-                .forEach(
-                        entry ->
-                                activePlugins.put(
-                                        entry.getPlugin(), entry.instantiate(exporterState)));
+            .filter(RegistryEntry::areDependenciesSatisfied)
+            .filter(RegistryEntry::isEnabled)
+            .forEach(entry -> activePlugins.put(entry.getPlugin(), entry.instantiate(exporterState)));
 
         if (!activePlugins.containsKey(Plugin.BASE)) {
             throw new IllegalStateException("base plugin must be enabled!");
@@ -77,14 +68,17 @@ public class PluginRegistry {
     }
 
     public void initializePlugins() {
-        activePlugins.values().forEach(PluginExporter::initialize);
+        activePlugins.values()
+            .forEach(PluginExporter::initialize);
     }
 
     public void processPlugins() {
-        activePlugins.values().forEach(PluginExporter::process);
+        activePlugins.values()
+            .forEach(PluginExporter::process);
     }
 
     public void postProcessPlugins() {
-        activePlugins.values().forEach(PluginExporter::postProcess);
+        activePlugins.values()
+            .forEach(PluginExporter::postProcess);
     }
 }

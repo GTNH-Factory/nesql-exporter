@@ -6,6 +6,7 @@ import com.github.dcysteine.nesql.sql.Plugin;
 
 /** Plugin which exports BetterQuesting quests. */
 public class QuestPluginExporter extends PluginExporter {
+
     public QuestPluginExporter(Plugin plugin, ExporterState exporterState) {
         super(plugin, exporterState);
     }

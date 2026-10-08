@@ -1,5 +1,12 @@
 package com.github.dcysteine.nesql.exporter.plugin.gregtech;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.github.dcysteine.nesql.exporter.main.Logger;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.PluginHelper;
@@ -10,25 +17,21 @@ import com.github.dcysteine.nesql.exporter.plugin.gregtech.util.GregTechUtil;
 import com.github.dcysteine.nesql.exporter.plugin.gregtech.util.Voltage;
 import com.github.dcysteine.nesql.sql.base.recipe.Recipe;
 import com.github.dcysteine.nesql.sql.base.recipe.RecipeType;
-import gregtech.api.util.GTRecipe;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import gregtech.api.util.GTRecipe;
 
 public class GregTechRecipeProcessor extends PluginHelper {
+
     private final GregTechRecipeTypeHandler recipeTypeHandler;
 
-    public GregTechRecipeProcessor(
-            PluginExporter exporter, GregTechRecipeTypeHandler recipeTypeHandler) {
+    public GregTechRecipeProcessor(PluginExporter exporter, GregTechRecipeTypeHandler recipeTypeHandler) {
         super(exporter);
         this.recipeTypeHandler = recipeTypeHandler;
     }
 
     public void process() {
-        int recipeMapTotal = GregTechRecipeMap.allNEIRecipeMaps.values().size();
+        int recipeMapTotal = GregTechRecipeMap.allNEIRecipeMaps.values()
+            .size();
         logger.info("Processing {} GregTech recipe maps...", recipeMapTotal);
 
         GregTechRecipeFactory gregTechRecipeFactory = new GregTechRecipeFactory(exporter);
@@ -37,7 +40,8 @@ public class GregTechRecipeProcessor extends PluginHelper {
             logger.info("Processing recipe map: " + GregTechRecipeMap.getName());
             recipeMapCount++;
 
-            Collection<GTRecipe> recipes = GregTechRecipeMap.getRecipeMap().getAllRecipes();
+            Collection<GTRecipe> recipes = GregTechRecipeMap.getRecipeMap()
+                .getAllRecipes();
             int total = recipes.size();
             logger.info("Processing {} GregTech recipes...", total);
 
@@ -76,17 +80,15 @@ public class GregTechRecipeProcessor extends PluginHelper {
                     }
 
                     Recipe recipeEntity = builder.build();
-                    gregTechRecipeFactory.get(
-                            recipeEntity, GregTechRecipeMap, recipe, voltageTier, voltage, specialItems);
+                    gregTechRecipeFactory
+                        .get(recipeEntity, GregTechRecipeMap, recipe, voltageTier, voltage, specialItems);
                 } catch (Exception e) {
                     logger.error("Caught exception processing GregTech recipe!");
                     e.printStackTrace();
                 }
 
                 if (Logger.intermittentLog(count)) {
-                    logger.info(
-                            "Processed GregTech {} recipe {} of {}",
-                            GregTechRecipeMap.getName(), count, total);
+                    logger.info("Processed GregTech {} recipe {} of {}", GregTechRecipeMap.getName(), count, total);
                 }
             }
 

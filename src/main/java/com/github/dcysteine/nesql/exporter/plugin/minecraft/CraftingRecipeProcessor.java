@@ -1,11 +1,8 @@
 package com.github.dcysteine.nesql.exporter.plugin.minecraft;
 
-import codechicken.nei.NEIServerUtils;
-import com.github.dcysteine.nesql.exporter.main.Logger;
-import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
-import com.github.dcysteine.nesql.exporter.plugin.PluginHelper;
-import com.github.dcysteine.nesql.exporter.plugin.base.factory.RecipeBuilder;
-import com.github.dcysteine.nesql.sql.base.recipe.RecipeType;
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
@@ -14,27 +11,31 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.util.Arrays;
-import java.util.List;
+import com.github.dcysteine.nesql.exporter.main.Logger;
+import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
+import com.github.dcysteine.nesql.exporter.plugin.PluginHelper;
+import com.github.dcysteine.nesql.exporter.plugin.base.factory.RecipeBuilder;
+import com.github.dcysteine.nesql.sql.base.recipe.RecipeType;
+
+import codechicken.nei.NEIServerUtils;
 
 public class CraftingRecipeProcessor extends PluginHelper {
+
     private final RecipeType shapedCrafting;
     private final RecipeType shapelessCrafting;
 
-    public CraftingRecipeProcessor(
-            PluginExporter exporter, MinecraftRecipeTypeHandler recipeTypeHandler) {
+    public CraftingRecipeProcessor(PluginExporter exporter, MinecraftRecipeTypeHandler recipeTypeHandler) {
         super(exporter);
-        this.shapedCrafting =
-                recipeTypeHandler.getRecipeType(
-                        MinecraftRecipeTypeHandler.MinecraftRecipeType.SHAPED_CRAFTING);
-        this.shapelessCrafting =
-                recipeTypeHandler.getRecipeType(
-                        MinecraftRecipeTypeHandler.MinecraftRecipeType.SHAPELESS_CRAFTING);
+        this.shapedCrafting = recipeTypeHandler
+            .getRecipeType(MinecraftRecipeTypeHandler.MinecraftRecipeType.SHAPED_CRAFTING);
+        this.shapelessCrafting = recipeTypeHandler
+            .getRecipeType(MinecraftRecipeTypeHandler.MinecraftRecipeType.SHAPELESS_CRAFTING);
     }
 
     public void process() {
         @SuppressWarnings("unchecked")
-        List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
+        List<IRecipe> recipes = CraftingManager.getInstance()
+            .getRecipeList();
         int total = recipes.size();
         logger.info("Processing {} crafting recipes...", total);
 
@@ -62,7 +63,9 @@ public class CraftingRecipeProcessor extends PluginHelper {
             if (Logger.intermittentLog(count)) {
                 logger.info("Processed crafting recipe {} of {}", count, total);
                 logger.info(
-                        "Most recent recipe: {}", recipe.getRecipeOutput().getDisplayName());
+                    "Most recent recipe: {}",
+                    recipe.getRecipeOutput()
+                        .getDisplayName());
             }
         }
 
@@ -80,7 +83,8 @@ public class CraftingRecipeProcessor extends PluginHelper {
 
             handleItemInput(builder, itemInput);
         }
-        builder.addItemOutput(recipe.getRecipeOutput()).build();
+        builder.addItemOutput(recipe.getRecipeOutput())
+            .build();
     }
 
     private void processShapedOreRecipe(ShapedOreRecipe recipe) {
@@ -97,7 +101,8 @@ public class CraftingRecipeProcessor extends PluginHelper {
 
             handleItemInput(builder, itemInput);
         }
-        builder.addItemOutput(recipe.getRecipeOutput()).build();
+        builder.addItemOutput(recipe.getRecipeOutput())
+            .build();
     }
 
     private void processShapelessRecipe(ShapelessRecipes recipe) {
@@ -111,7 +116,8 @@ public class CraftingRecipeProcessor extends PluginHelper {
         for (Object itemInput : recipe.recipeItems) {
             handleItemInput(builder, itemInput);
         }
-        builder.addItemOutput(recipe.getRecipeOutput()).build();
+        builder.addItemOutput(recipe.getRecipeOutput())
+            .build();
     }
 
     private void processShapelessOreRecipe(ShapelessOreRecipe recipe) {
@@ -125,7 +131,8 @@ public class CraftingRecipeProcessor extends PluginHelper {
 
             handleItemInput(builder, itemInput);
         }
-        builder.addItemOutput(recipe.getRecipeOutput()).build();
+        builder.addItemOutput(recipe.getRecipeOutput())
+            .build();
     }
 
     private void handleItemInput(RecipeBuilder builder, Object itemInput) {

@@ -1,26 +1,5 @@
 package com.github.dcysteine.nesql.exporter.render;
 
-import codechicken.lib.gui.GuiDraw;
-import codechicken.nei.guihook.GuiContainerManager;
-import com.github.dcysteine.nesql.exporter.main.Logger;
-import com.github.dcysteine.nesql.exporter.main.config.ConfigOptions;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.shader.Framebuffer;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL30;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -32,8 +11,34 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import javax.imageio.ImageIO;
+
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.GL30;
+
+import com.github.dcysteine.nesql.exporter.main.Logger;
+import com.github.dcysteine.nesql.exporter.main.config.ConfigOptions;
+
+import codechicken.lib.gui.GuiDraw;
+import codechicken.nei.guihook.GuiContainerManager;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+
 /** Singleton class that handles rendering items and fluids and saving the resulting image data. */
 public enum Renderer {
+
     INSTANCE;
 
     public static final String IMAGE_FILE_EXTENSION = ".png";
@@ -41,15 +46,16 @@ public enum Renderer {
 
     /** Enum which handles rendering different types / sizes of images. */
     public enum RenderTarget {
+
         ICON,
-        MOB,
-        ;
+        MOB,;
 
         /** Holds the currently bound render target, or null if all render targets are unbound. */
         private static RenderTarget boundBuffer = null;
 
         private static void forEach(Consumer<RenderTarget> consumer) {
-            Arrays.stream(values()).forEach(consumer);
+            Arrays.stream(values())
+                .forEach(consumer);
         }
 
         private int imageDim;
@@ -143,8 +149,7 @@ public enum Renderer {
 
             default:
                 throw new IllegalArgumentException(
-                        "Unrecognized render state: "
-                                + RenderDispatcher.INSTANCE.getRendererState());
+                    "Unrecognized render state: " + RenderDispatcher.INSTANCE.getRendererState());
         }
 
         if (RenderDispatcher.INSTANCE.noJobsRemaining()) {
@@ -203,13 +208,15 @@ public enum Renderer {
 
             case FLUID:
                 FluidStack fluidStack = job.getFluid();
-                IIcon icon = fluidStack.getFluid().getIcon(fluidStack);
+                IIcon icon = fluidStack.getFluid()
+                    .getIcon(fluidStack);
                 // Some fluids don't set their icon colour, so we have to blend in the colour.
-                int colour = fluidStack.getFluid().getColor(fluidStack);
+                int colour = fluidStack.getFluid()
+                    .getColor(fluidStack);
                 GL11.glColor3ub(
-                        (byte) ((colour & 0xFF0000) >> 16),
-                        (byte) ((colour & 0x00FF00) >> 8),
-                        (byte) (colour & 0x0000FF));
+                    (byte) ((colour & 0xFF0000) >> 16),
+                    (byte) ((colour & 0x00FF00) >> 8),
+                    (byte) (colour & 0x0000FF));
 
                 GuiDraw.changeTexture(TextureMap.locationBlocksTexture);
                 GuiDraw.gui.drawTexturedModelRectFromIcon(0, 0, icon, 16, 16);
@@ -219,7 +226,8 @@ public enum Renderer {
                 break;
 
             case MOB:
-                Optional<Entity> entityOptional = job.getMob().createEntity();
+                Optional<Entity> entityOptional = job.getMob()
+                    .createEntity();
                 if (!entityOptional.isPresent()) {
                     // This shouldn't ever happen,
                     // because we already check for null entity before enqueueing the render job.
@@ -229,19 +237,17 @@ public enum Renderer {
 
                 Entity entity = entityOptional.get();
                 float scale =
-                        // Magic constant to make most mobs fit within the rendered image.
-                        // It's not a perfect fit, and varies a bit from mob to mob.
-                        // TODO maybe improve this? Probably pretty difficult, though.
-                        // Could also make it a config option.
-                        0.035f * Math.min(
-                                target.imageDim / entity.width,
-                                target.imageDim / entity.height);
+                    // Magic constant to make most mobs fit within the rendered image.
+                    // It's not a perfect fit, and varies a bit from mob to mob.
+                    // TODO maybe improve this? Probably pretty difficult, though.
+                    // Could also make it a config option.
+                    0.035f * Math.min(target.imageDim / entity.width, target.imageDim / entity.height);
 
                 // Lots of mob renderers don't do a good job of cleaning up their state...
                 GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
                 GL11.glPushMatrix();
-                GL11.glTranslatef(8f, 0f, 0f);  // Center the mob in the rendered image.
+                GL11.glTranslatef(8f, 0f, 0f); // Center the mob in the rendered image.
                 GL11.glScalef(scale, scale, scale);
                 RenderManager.instance.renderEntityWithPosYaw(entity, 0d, 0d, 0d, 0f, 1f);
                 GL11.glPopMatrix();
@@ -257,11 +263,11 @@ public enum Renderer {
     private BufferedImage readImage(RenderTarget target) {
         int imageDim = target.imageDim;
         ByteBuffer imageByteBuffer = BufferUtils.createByteBuffer(4 * imageDim * imageDim);
-        GL11.glReadPixels(
-                0, 0, imageDim, imageDim, GL12.GL_BGRA, GL11.GL_UNSIGNED_BYTE, imageByteBuffer);
+        GL11.glReadPixels(0, 0, imageDim, imageDim, GL12.GL_BGRA, GL11.GL_UNSIGNED_BYTE, imageByteBuffer);
 
         int[] pixels = new int[imageDim * imageDim];
-        imageByteBuffer.asIntBuffer().get(pixels);
+        imageByteBuffer.asIntBuffer()
+            .get(pixels);
 
         // OpenGL uses inverted y-coordinates compared to our draw methods.
         // So we must flip the saved image vertically.
@@ -280,8 +286,7 @@ public enum Renderer {
             pixels = flippedPixels;
         }
 
-        BufferedImage image =
-                new BufferedImage(imageDim, imageDim, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage image = new BufferedImage(imageDim, imageDim, BufferedImage.TYPE_INT_ARGB);
         image.setRGB(0, 0, imageDim, imageDim, pixels, 0, imageDim);
         return image;
     }

@@ -6,6 +6,7 @@ import com.github.dcysteine.nesql.sql.Plugin;
 
 /** Plugin which exports BetterQuesting quests. */
 public class ThaumcraftPluginExporter extends PluginExporter {
+
     private final ThaumcraftRecipeTypeHandler recipeTypeHandler;
 
     public ThaumcraftPluginExporter(Plugin plugin, ExporterState exporterState) {

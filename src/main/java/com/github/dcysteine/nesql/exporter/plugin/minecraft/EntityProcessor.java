@@ -1,17 +1,19 @@
 package com.github.dcysteine.nesql.exporter.plugin.minecraft;
 
+import java.util.Map;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+
 import com.github.dcysteine.nesql.exporter.common.MobSpec;
 import com.github.dcysteine.nesql.exporter.main.Logger;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.PluginHelper;
 import com.github.dcysteine.nesql.exporter.plugin.base.factory.MobFactory;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-
-import java.util.Map;
 
 public class EntityProcessor extends PluginHelper {
+
     public EntityProcessor(PluginExporter exporter) {
         super(exporter);
     }

@@ -1,11 +1,5 @@
 package com.github.dcysteine.nesql.exporter.util;
 
-import com.google.common.primitives.Bytes;
-import com.google.common.primitives.Longs;
-import com.google.protobuf.CodedOutputStream;
-import com.google.protobuf.Message;
-import net.minecraft.nbt.NBTTagCompound;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -13,15 +7,24 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.UUID;
 
+import net.minecraft.nbt.NBTTagCompound;
+
+import com.google.common.primitives.Bytes;
+import com.google.common.primitives.Longs;
+import com.google.protobuf.CodedOutputStream;
+import com.google.protobuf.Message;
+
 /** Utility class containing methods for handling strings and encoding things. */
 public final class StringUtil {
+
     // Static class.
     private StringUtil() {}
 
     /**
      * Replaces system-specific file separators with forward slash.
      *
-     * <p>Call this method before saving file paths to the database, since the images are being
+     * <p>
+     * Call this method before saving file paths to the database, since the images are being
      * served by a web server and should therefore use forward slash.
      */
     public static String formatFilePath(String filePath) {
@@ -42,7 +45,8 @@ public final class StringUtil {
         byte[] upper = Longs.toByteArray(uuid.getMostSignificantBits());
         byte[] lower = Longs.toByteArray(uuid.getLeastSignificantBits());
 
-        return Base64.getUrlEncoder().encodeToString(Bytes.concat(upper, lower));
+        return Base64.getUrlEncoder()
+            .encodeToString(Bytes.concat(upper, lower));
     }
 
     public static String encodeString(String string) {

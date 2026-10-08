@@ -1,8 +1,11 @@
 package com.github.dcysteine.nesql.sql.forge;
 
+import java.util.Comparator;
+
 import com.github.dcysteine.nesql.sql.Identifiable;
 import com.github.dcysteine.nesql.sql.base.fluid.FluidStack;
 import com.github.dcysteine.nesql.sql.base.item.Item;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,14 +15,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Comparator;
-
 /** Holds data for a fluid container. */
 @Entity
 @EqualsAndHashCode
 @Getter
 @ToString
 public class FluidContainer implements Identifiable<String> {
+
     @Id
     @Column(nullable = false)
     private String id;
@@ -47,10 +49,10 @@ public class FluidContainer implements Identifiable<String> {
     public int compareTo(Identifiable<String> other) {
         if (other instanceof FluidContainer) {
             return Comparator.comparing(FluidContainer::getFluidStack)
-                    .thenComparing(FluidContainer::getEmptyContainer)
-                    .thenComparing(FluidContainer::getContainer)
-                    .thenComparing(FluidContainer::getId)
-                    .compare(this, (FluidContainer) other);
+                .thenComparing(FluidContainer::getEmptyContainer)
+                .thenComparing(FluidContainer::getContainer)
+                .thenComparing(FluidContainer::getId)
+                .compare(this, (FluidContainer) other);
         } else {
             return Identifiable.super.compareTo(other);
         }

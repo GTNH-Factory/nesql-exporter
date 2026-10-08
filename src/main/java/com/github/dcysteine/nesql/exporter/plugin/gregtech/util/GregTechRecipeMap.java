@@ -1,24 +1,27 @@
 package com.github.dcysteine.nesql.exporter.plugin.gregtech.util;
 
-import com.github.dcysteine.nesql.sql.base.recipe.Dimension;
-import com.gtnewhorizons.modularui.api.math.Pos2d;
-import gregtech.api.recipe.RecipeMapBackend;
-import gregtech.api.util.GTLanguageManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.StatCollector;
+import static codechicken.nei.recipe.RecipeCatalysts.getRecipeCatalysts;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static codechicken.nei.recipe.RecipeCatalysts.getRecipeCatalysts;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.StatCollector;
+
+import com.github.dcysteine.nesql.sql.base.recipe.Dimension;
+import com.gtnewhorizons.modularui.api.math.Pos2d;
+
+import gregtech.api.recipe.RecipeMapBackend;
+import gregtech.api.util.GTLanguageManager;
 
 /** Enum of supported GregTech recipe maps. */
 public class GregTechRecipeMap {
-    public static HashMap<String, GregTechRecipeMap> allNEIRecipeMaps=new HashMap<>();
+
+    public static HashMap<String, GregTechRecipeMap> allNEIRecipeMaps = new HashMap<>();
     private final gregtech.api.recipe.RecipeMap<? extends RecipeMapBackend> recipeMap;
     /** Used for IDs. */
     private final String shortName;
@@ -29,10 +32,10 @@ public class GregTechRecipeMap {
     private final Dimension fluidInputDimension;
     private final Dimension itemOutputDimension;
     private final Dimension fluidOutputDimension;
-    GregTechRecipeMap(
-            gregtech.api.recipe.RecipeMap<? extends RecipeMapBackend> recipeMap, String shortName, List<ItemStack> icon, boolean shapeless,
-            Dimension itemInputDimension, Dimension fluidInputDimension,
-            Dimension itemOutputDimension, Dimension fluidOutputDimension) {
+
+    GregTechRecipeMap(gregtech.api.recipe.RecipeMap<? extends RecipeMapBackend> recipeMap, String shortName,
+        List<ItemStack> icon, boolean shapeless, Dimension itemInputDimension, Dimension fluidInputDimension,
+        Dimension itemOutputDimension, Dimension fluidOutputDimension) {
         this.recipeMap = recipeMap;
         this.shortName = shortName;
         this.name = GTLanguageManager.getTranslation(recipeMap.unlocalizedName);
@@ -43,44 +46,61 @@ public class GregTechRecipeMap {
         this.itemOutputDimension = itemOutputDimension;
         this.fluidOutputDimension = fluidOutputDimension;
     }
-    public static void makeGTRecipe(){
-        for(gregtech.api.recipe.RecipeMap<?> oriGTRecipeMap:gregtech.api.recipe.RecipeMap.ALL_RECIPE_MAPS.values()){
-            List<ItemStack> catalysts=getRecipeCatalysts(oriGTRecipeMap.unlocalizedName).stream().map(var->var.item).collect(Collectors.toList());
-            if(catalysts.isEmpty())continue;
-            GregTechRecipeMap gregTechRecipeMap =new GregTechRecipeMap(
-                    oriGTRecipeMap,
-                    oriGTRecipeMap.unlocalizedName,
-                    catalysts,
-                    true,
-                    getDimension(oriGTRecipeMap.getFrontend().getUIProperties().itemInputPositionsGetter.apply(
-                            oriGTRecipeMap.getFrontend().getUIProperties().maxItemInputs)),
-                    getDimension(oriGTRecipeMap.getFrontend().getUIProperties().fluidInputPositionsGetter.apply(
-                            oriGTRecipeMap.getFrontend().getUIProperties().maxFluidInputs)),
-                    getDimension(oriGTRecipeMap.getFrontend().getUIProperties().itemOutputPositionsGetter.apply(
-                            oriGTRecipeMap.getFrontend().getUIProperties().maxItemOutputs)),
-                    getDimension(oriGTRecipeMap.getFrontend().getUIProperties().fluidOutputPositionsGetter.apply(
-                            oriGTRecipeMap.getFrontend().getUIProperties().maxFluidOutputs))
-            );
+
+    public static void makeGTRecipe() {
+        for (gregtech.api.recipe.RecipeMap<?> oriGTRecipeMap : gregtech.api.recipe.RecipeMap.ALL_RECIPE_MAPS.values()) {
+            List<ItemStack> catalysts = getRecipeCatalysts(oriGTRecipeMap.unlocalizedName).stream()
+                .map(var -> var.item)
+                .collect(Collectors.toList());
+            if (catalysts.isEmpty()) continue;
+            GregTechRecipeMap gregTechRecipeMap = new GregTechRecipeMap(
+                oriGTRecipeMap,
+                oriGTRecipeMap.unlocalizedName,
+                catalysts,
+                true,
+                getDimension(
+                    oriGTRecipeMap.getFrontend()
+                        .getUIProperties().itemInputPositionsGetter.apply(
+                            oriGTRecipeMap.getFrontend()
+                                .getUIProperties().maxItemInputs)),
+                getDimension(
+                    oriGTRecipeMap.getFrontend()
+                        .getUIProperties().fluidInputPositionsGetter.apply(
+                            oriGTRecipeMap.getFrontend()
+                                .getUIProperties().maxFluidInputs)),
+                getDimension(
+                    oriGTRecipeMap.getFrontend()
+                        .getUIProperties().itemOutputPositionsGetter.apply(
+                            oriGTRecipeMap.getFrontend()
+                                .getUIProperties().maxItemOutputs)),
+                getDimension(
+                    oriGTRecipeMap.getFrontend()
+                        .getUIProperties().fluidOutputPositionsGetter.apply(
+                            oriGTRecipeMap.getFrontend()
+                                .getUIProperties().maxFluidOutputs)));
             allNEIRecipeMaps.put(oriGTRecipeMap.unlocalizedName, gregTechRecipeMap);
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("RecipeMap "+
-                    StatCollector.translateToLocal(oriGTRecipeMap.unlocalizedName)+" export!"));
+            Minecraft.getMinecraft().thePlayer.addChatMessage(
+                new ChatComponentText(
+                    "RecipeMap " + StatCollector.translateToLocal(oriGTRecipeMap.unlocalizedName) + " export!"));
         }
     }
-    public static Dimension getDimension(List<Pos2d> posList){
-        int[] dimension=new int[]{0,0};
-        List<Integer> x=new ArrayList<>(),y=new ArrayList<>();
-        for(Pos2d pos:posList){
-            if(!x.contains(pos.x)){
+
+    public static Dimension getDimension(List<Pos2d> posList) {
+        int[] dimension = new int[] { 0, 0 };
+        List<Integer> x = new ArrayList<>(), y = new ArrayList<>();
+        for (Pos2d pos : posList) {
+            if (!x.contains(pos.x)) {
                 dimension[0]++;
                 x.add(pos.x);
             }
-            if(!y.contains(pos.y)){
+            if (!y.contains(pos.y)) {
                 dimension[1]++;
                 y.add(pos.y);
             }
         }
-        return new Dimension(dimension[0],dimension[1]);
+        return new Dimension(dimension[0], dimension[1]);
     }
+
     public gregtech.api.recipe.RecipeMap<? extends RecipeMapBackend> getRecipeMap() {
         return recipeMap;
     }

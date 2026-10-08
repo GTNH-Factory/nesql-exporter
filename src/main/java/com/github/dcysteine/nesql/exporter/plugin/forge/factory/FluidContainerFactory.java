@@ -1,5 +1,7 @@
 package com.github.dcysteine.nesql.exporter.plugin.forge.factory;
 
+import net.minecraftforge.fluids.FluidContainerRegistry;
+
 import com.github.dcysteine.nesql.exporter.plugin.EntityFactory;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.base.factory.FluidFactory;
@@ -9,9 +11,9 @@ import com.github.dcysteine.nesql.sql.base.fluid.Fluid;
 import com.github.dcysteine.nesql.sql.base.fluid.FluidStack;
 import com.github.dcysteine.nesql.sql.base.item.Item;
 import com.github.dcysteine.nesql.sql.forge.FluidContainer;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 
 public class FluidContainerFactory extends EntityFactory<FluidContainer, String> {
+
     private final FluidFactory fluidFactory;
     private final ItemFactory itemFactory;
 
@@ -29,8 +31,7 @@ public class FluidContainerFactory extends EntityFactory<FluidContainer, String>
         String id = IdPrefixUtil.FLUID_CONTAINER.applyPrefix(container.getId());
         FluidStack fluidStack = new FluidStack(fluid, datum.fluid.amount);
 
-        FluidContainer fluidContainer =
-                new FluidContainer(id, fluidStack, container, emptyContainer);
+        FluidContainer fluidContainer = new FluidContainer(id, fluidStack, container, emptyContainer);
         return findOrPersist(FluidContainer.class, fluidContainer);
     }
 }

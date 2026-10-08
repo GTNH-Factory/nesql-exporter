@@ -3,6 +3,7 @@ package com.github.dcysteine.nesql.exporter.util;
 import java.text.NumberFormat;
 
 public class NumberUtil {
+
     // Static class.
     private NumberUtil() {}
 

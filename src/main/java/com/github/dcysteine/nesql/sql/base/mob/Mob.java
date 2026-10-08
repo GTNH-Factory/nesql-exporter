@@ -1,7 +1,10 @@
 package com.github.dcysteine.nesql.sql.base.mob;
 
+import java.util.Comparator;
+
 import com.github.dcysteine.nesql.sql.Identifiable;
 import com.github.dcysteine.nesql.sql.Metadata;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,13 +12,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Comparator;
-
 @Entity
 @EqualsAndHashCode
 @Getter
 @ToString
 public class Mob implements Identifiable<String> {
+
     @Id
     @Column(nullable = false)
     private String id;
@@ -45,19 +47,8 @@ public class Mob implements Identifiable<String> {
     /** Needed by Hibernate. */
     protected Mob() {}
 
-    public Mob(
-            String id,
-            String imageFilePath,
-            String modId,
-            String internalName,
-            String localizedName,
-            String nbt,
-            double width,
-            double height,
-            double health,
-            int armour,
-            boolean immuneToFire,
-            boolean leashable) {
+    public Mob(String id, String imageFilePath, String modId, String internalName, String localizedName, String nbt,
+        double width, double height, double health, int armour, boolean immuneToFire, boolean leashable) {
         this.id = id;
         this.imageFilePath = imageFilePath;
         this.modId = modId;
@@ -80,10 +71,10 @@ public class Mob implements Identifiable<String> {
     public int compareTo(Identifiable<String> other) {
         if (other instanceof Mob) {
             return Comparator.comparing(Mob::getModId)
-                    .thenComparing(Mob::getInternalName)
-                    .thenComparing(Mob::getNbt, Comparator.naturalOrder())
-                    .thenComparing(Mob::getId)
-                    .compare(this, (Mob) other);
+                .thenComparing(Mob::getInternalName)
+                .thenComparing(Mob::getNbt, Comparator.naturalOrder())
+                .thenComparing(Mob::getId)
+                .compare(this, (Mob) other);
         } else {
             return Identifiable.super.compareTo(other);
         }

@@ -1,7 +1,10 @@
 package com.github.dcysteine.nesql.sql.thaumcraft;
 
+import java.util.Comparator;
+
 import com.github.dcysteine.nesql.sql.Identifiable;
 import com.github.dcysteine.nesql.sql.base.item.Item;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,14 +13,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Comparator;
-
 /** Holds information about an {@link Item}'s quantity of a single aspect. */
 @Entity
 @EqualsAndHashCode
 @Getter
 @ToString
 public class AspectEntry implements Identifiable<String> {
+
     @Id
     @Column(nullable = false)
     private String id;
@@ -44,9 +46,9 @@ public class AspectEntry implements Identifiable<String> {
     public int compareTo(Identifiable<String> other) {
         if (other instanceof AspectEntry) {
             return Comparator.comparing(AspectEntry::getAspect)
-                    .thenComparing(AspectEntry::getAmount)
-                    .thenComparing(AspectEntry::getId)
-                    .compare(this, (AspectEntry) other);
+                .thenComparing(AspectEntry::getAmount)
+                .thenComparing(AspectEntry::getId)
+                .compare(this, (AspectEntry) other);
         } else {
             return Identifiable.super.compareTo(other);
         }

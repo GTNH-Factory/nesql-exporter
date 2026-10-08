@@ -1,13 +1,14 @@
 package com.github.dcysteine.nesql.sql.quest;
 
+import java.util.Comparator;
+
+import org.jetbrains.annotations.NotNull;
+
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Comparator;
 
 /** Holds information about a BetterQuesting quest line entry. */
 @Embeddable
@@ -15,6 +16,7 @@ import java.util.Comparator;
 @Getter
 @ToString
 public class QuestLineEntry implements Comparable<QuestLineEntry> {
+
     @ManyToOne
     private Quest quest;
 
@@ -37,10 +39,10 @@ public class QuestLineEntry implements Comparable<QuestLineEntry> {
     @Override
     public int compareTo(@NotNull QuestLineEntry other) {
         return Comparator.comparing(QuestLineEntry::getQuest)
-                .thenComparing(QuestLineEntry::getPosX)
-                .thenComparing(QuestLineEntry::getPosY)
-                .thenComparing(QuestLineEntry::getSizeX)
-                .thenComparing(QuestLineEntry::getSizeY)
-                .compare(this, other);
+            .thenComparing(QuestLineEntry::getPosX)
+            .thenComparing(QuestLineEntry::getPosY)
+            .thenComparing(QuestLineEntry::getSizeX)
+            .thenComparing(QuestLineEntry::getSizeY)
+            .compare(this, other);
     }
 }

@@ -1,13 +1,14 @@
 package com.github.dcysteine.nesql.sql.base.fluid;
 
+import java.util.Comparator;
+
+import org.jetbrains.annotations.NotNull;
+
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Comparator;
 
 /**
  * A container class consisting of a {@link Fluid}, paired with an amount.
@@ -18,6 +19,7 @@ import java.util.Comparator;
 @Getter
 @ToString
 public class FluidStack implements Comparable<FluidStack> {
+
     @ManyToOne
     private Fluid fluid;
 
@@ -33,7 +35,8 @@ public class FluidStack implements Comparable<FluidStack> {
 
     @Override
     public int compareTo(@NotNull FluidStack other) {
-        return Comparator.comparing(FluidStack::getFluid).thenComparing(FluidStack::getAmount)
-                .compare(this, other);
+        return Comparator.comparing(FluidStack::getFluid)
+            .thenComparing(FluidStack::getAmount)
+            .compare(this, other);
     }
 }

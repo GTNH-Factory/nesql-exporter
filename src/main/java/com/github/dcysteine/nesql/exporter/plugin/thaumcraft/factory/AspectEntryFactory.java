@@ -8,6 +8,7 @@ import com.github.dcysteine.nesql.sql.thaumcraft.Aspect;
 import com.github.dcysteine.nesql.sql.thaumcraft.AspectEntry;
 
 public class AspectEntryFactory extends EntityFactory<AspectEntry, String> {
+
     public AspectEntryFactory(PluginExporter exporter) {
         super(exporter);
     }

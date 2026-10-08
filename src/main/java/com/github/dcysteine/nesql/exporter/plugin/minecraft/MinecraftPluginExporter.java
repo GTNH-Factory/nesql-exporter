@@ -6,6 +6,7 @@ import com.github.dcysteine.nesql.sql.Plugin;
 
 /** Plugin which handles vanilla Minecraft recipes. */
 public class MinecraftPluginExporter extends PluginExporter {
+
     private final MinecraftRecipeTypeHandler recipeTypeHandler;
 
     public MinecraftPluginExporter(Plugin plugin, ExporterState exporterState) {

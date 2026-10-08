@@ -1,11 +1,11 @@
 package com.github.dcysteine.nesql.sql.mobinfo;
 
 public enum MobDropType {
+
     NORMAL("normal"),
     RARE("rare"),
     ADDITIONAL("additional"),
-    INFERNAL("infernal"),
-    ;
+    INFERNAL("infernal"),;
 
     private final String name;
 

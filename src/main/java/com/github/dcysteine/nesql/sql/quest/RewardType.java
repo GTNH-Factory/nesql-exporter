@@ -5,6 +5,7 @@ package com.github.dcysteine.nesql.sql.quest;
  * Each task type will set different fields on the {@link Reward} object.
  */
 public enum RewardType {
+
     /** Sets the {@code items} field. */
     ITEM("item"),
 
@@ -21,8 +22,7 @@ public enum RewardType {
     COMPLETE_QUEST("complete quest"),
 
     /** Does not set any fields. */
-    UNHANDLED("unhandled"),
-    ;
+    UNHANDLED("unhandled"),;
 
     private final String name;
 

@@ -1,10 +1,11 @@
 package com.github.dcysteine.nesql.sql;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.Arrays;
 
+import com.google.common.collect.ImmutableList;
+
 public enum Plugin {
+
     BASE("base"),
     MINECRAFT("minecraft"),
     NEI("nei"),
@@ -15,14 +16,15 @@ public enum Plugin {
     AVARITIA("avaritia"),
     GREGTECH("gregtech"),
     THAUMCRAFT("thaumcraft"),
-    QUEST("quest"),
-    ;
+    QUEST("quest"),;
 
     public static final ImmutableList<String> NAMES;
 
     static {
         ImmutableList.Builder<String> builder = ImmutableList.builder();
-        Arrays.stream(values()).map(Plugin::getName).forEach(builder::add);
+        Arrays.stream(values())
+            .map(Plugin::getName)
+            .forEach(builder::add);
         NAMES = builder.build();
     }
 

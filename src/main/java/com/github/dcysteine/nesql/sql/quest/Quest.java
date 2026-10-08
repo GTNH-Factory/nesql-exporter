@@ -1,8 +1,14 @@
 package com.github.dcysteine.nesql.sql.quest;
 
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.github.dcysteine.nesql.sql.Identifiable;
 import com.github.dcysteine.nesql.sql.Metadata;
 import com.github.dcysteine.nesql.sql.base.item.Item;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,17 +20,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 /** Holds information about a BetterQuesting quest. */
 @Entity
 @EqualsAndHashCode
 @Getter
 @ToString
 public class Quest implements Identifiable<String> {
+
     @Id
     private String id;
 
@@ -82,10 +84,8 @@ public class Quest implements Identifiable<String> {
      * We'll set {@link #requiredQuests} in a second pass,
      * after all quests have been committed to the DB.
      */
-    public Quest(
-            String id, String questId, Item icon, String name, String description,
-            String visibility, int repeatTime,
-            String questLogic, String taskLogic, List<Task> tasks, List<Reward> rewards) {
+    public Quest(String id, String questId, Item icon, String name, String description, String visibility,
+        int repeatTime, String questLogic, String taskLogic, List<Task> tasks, List<Reward> rewards) {
         this.id = id;
         this.questId = questId;
         this.icon = icon;
@@ -109,8 +109,8 @@ public class Quest implements Identifiable<String> {
     public int compareTo(Identifiable<String> other) {
         if (other instanceof Quest) {
             return Comparator.comparing(Quest::getName)
-                    .thenComparing(Quest::getId)
-                    .compare(this, (Quest) other);
+                .thenComparing(Quest::getId)
+                .compare(this, (Quest) other);
         } else {
             return Identifiable.super.compareTo(other);
         }

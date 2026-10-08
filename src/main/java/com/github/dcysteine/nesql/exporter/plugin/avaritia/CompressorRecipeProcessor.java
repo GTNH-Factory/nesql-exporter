@@ -1,26 +1,26 @@
 package com.github.dcysteine.nesql.exporter.plugin.avaritia;
 
-import codechicken.nei.NEIServerUtils;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+
 import com.github.dcysteine.nesql.exporter.main.Logger;
 import com.github.dcysteine.nesql.exporter.plugin.PluginExporter;
 import com.github.dcysteine.nesql.exporter.plugin.PluginHelper;
 import com.github.dcysteine.nesql.exporter.plugin.base.factory.RecipeBuilder;
 import com.github.dcysteine.nesql.sql.base.recipe.RecipeType;
+
+import codechicken.nei.NEIServerUtils;
 import fox.spiteful.avaritia.crafting.CompressorManager;
 import fox.spiteful.avaritia.crafting.CompressorRecipe;
-import net.minecraft.item.ItemStack;
-
-import java.util.List;
 
 public class CompressorRecipeProcessor extends PluginHelper {
+
     private final RecipeType compressor;
 
-    public CompressorRecipeProcessor(
-            PluginExporter exporter, AvaritiaRecipeTypeHandler recipeTypeHandler) {
+    public CompressorRecipeProcessor(PluginExporter exporter, AvaritiaRecipeTypeHandler recipeTypeHandler) {
         super(exporter);
-        this.compressor =
-                recipeTypeHandler.getRecipeType(
-                        AvaritiaRecipeTypeHandler.AvaritiaRecipeType.COMPRESSOR);
+        this.compressor = recipeTypeHandler.getRecipeType(AvaritiaRecipeTypeHandler.AvaritiaRecipeType.COMPRESSOR);
     }
 
     public void process() {
@@ -42,11 +42,15 @@ public class CompressorRecipeProcessor extends PluginHelper {
                 builder.addItemGroupInput(itemStacks);
             }
 
-            builder.addItemOutput(recipe.getOutput()).build();
+            builder.addItemOutput(recipe.getOutput())
+                .build();
 
             if (Logger.intermittentLog(count)) {
                 logger.info("Processed Avaritia compressor recipe {} of {}", count, total);
-                logger.info("Most recent recipe: {}", recipe.getOutput().getDisplayName());
+                logger.info(
+                    "Most recent recipe: {}",
+                    recipe.getOutput()
+                        .getDisplayName());
             }
         }
 

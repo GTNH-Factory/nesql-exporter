@@ -1,7 +1,12 @@
 package com.github.dcysteine.nesql.sql.thaumcraft;
 
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.github.dcysteine.nesql.sql.Identifiable;
 import com.github.dcysteine.nesql.sql.base.item.Item;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -11,16 +16,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-
 /** Holds basic information about Thaumcraft aspects. */
 @Entity
 @EqualsAndHashCode
 @Getter
 @ToString
 public class Aspect implements Identifiable<String> {
+
     @Id
     @Column(nullable = false)
     private String id;
@@ -71,9 +73,9 @@ public class Aspect implements Identifiable<String> {
     public int compareTo(Identifiable<String> other) {
         if (other instanceof Aspect) {
             return Comparator.comparing(Aspect::isPrimal)
-                    .thenComparing(Aspect::getName)
-                    .thenComparing(Aspect::getId)
-                    .compare(this, (Aspect) other);
+                .thenComparing(Aspect::getName)
+                .thenComparing(Aspect::getId)
+                .compare(this, (Aspect) other);
         } else {
             return Identifiable.super.compareTo(other);
         }

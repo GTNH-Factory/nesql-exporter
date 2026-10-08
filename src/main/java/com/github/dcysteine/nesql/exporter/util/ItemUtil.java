@@ -1,18 +1,19 @@
 package com.github.dcysteine.nesql.exporter.util;
 
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 /** Utility class containing methods for Minecraft items. */
 public final class ItemUtil {
+
     // Static class.
     private ItemUtil() {}
 
@@ -22,16 +23,17 @@ public final class ItemUtil {
 
     public static Optional<ItemStack> getItemStack(Block block) {
         return Optional.ofNullable(Item.getItemFromBlock(block))
-                .map(item -> new ItemStack(Item.getItemFromBlock(block), 1));
+            .map(item -> new ItemStack(Item.getItemFromBlock(block), 1));
     }
 
     public static Optional<ItemStack> getItemStack(Block block, int damage) {
         return Optional.ofNullable(Item.getItemFromBlock(block))
-                .map(item -> new ItemStack(Item.getItemFromBlock(block), 1, damage));
+            .map(item -> new ItemStack(Item.getItemFromBlock(block), 1, damage));
     }
 
     public static Optional<ItemStack> getItemStack(Fluid fluid) {
-        return Optional.ofNullable(fluid.getBlock()).flatMap(ItemUtil::getItemStack);
+        return Optional.ofNullable(fluid.getBlock())
+            .flatMap(ItemUtil::getItemStack);
     }
 
     public static boolean hasWildcardItemDamage(ItemStack itemStack) {
@@ -41,10 +43,8 @@ public final class ItemUtil {
     /** Returns a map of tool class to harvest level. */
     public static Map<String, Integer> getToolClasses(ItemStack itemStack) {
         Item item = itemStack.getItem();
-        return item.getToolClasses(itemStack).stream()
-                .collect(
-                        Collectors.toMap(
-                                Function.identity(),
-                                toolClass -> item.getHarvestLevel(itemStack, toolClass)));
+        return item.getToolClasses(itemStack)
+            .stream()
+            .collect(Collectors.toMap(Function.identity(), toolClass -> item.getHarvestLevel(itemStack, toolClass)));
     }
 }

@@ -1,18 +1,19 @@
 package com.github.dcysteine.nesql.exporter.plugin;
 
-import com.github.dcysteine.nesql.sql.Identifiable;
-
 import java.util.Optional;
+
+import com.github.dcysteine.nesql.sql.Identifiable;
 
 /**
  * Abstract class for entity factories.
  *
- * <p>When constructing a new entity, always return the result of calling
+ * <p>
+ * When constructing a new entity, always return the result of calling
  * {@link #findOrPersist(Class, Identifiable)} on it, as we must reference the already-persisted
  * instance, if it exists.
  */
-public abstract class EntityFactory<T extends Identifiable<K>, K extends Comparable<K>>
-        extends PluginHelper {
+public abstract class EntityFactory<T extends Identifiable<K>, K extends Comparable<K>> extends PluginHelper {
+
     protected EntityFactory(PluginExporter exporter) {
         super(exporter);
     }

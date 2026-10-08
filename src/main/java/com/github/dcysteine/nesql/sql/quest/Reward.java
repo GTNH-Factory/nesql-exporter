@@ -1,7 +1,10 @@
 package com.github.dcysteine.nesql.sql.quest;
 
+import java.util.List;
+
 import com.github.dcysteine.nesql.sql.Identifiable;
 import com.github.dcysteine.nesql.sql.base.item.ItemGroup;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,18 +16,18 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.List;
-
 /**
  * This class contains data for the various types of BetterQuesting rewards.
  *
- * <p>Each field will only be set for certain reward types. See {@link RewardType} for details.
+ * <p>
+ * Each field will only be set for certain reward types. See {@link RewardType} for details.
  */
 @Entity
 @EqualsAndHashCode
 @Getter
 @ToString
 public class Reward implements Identifiable<String> {
+
     @Id
     @Column(nullable = false)
     private String id;
@@ -55,9 +58,8 @@ public class Reward implements Identifiable<String> {
     /** Needed by Hibernate. */
     protected Reward() {}
 
-    public Reward(
-            String id, String name, RewardType type, List<ItemGroup> items,
-            String command, int xp, boolean levels, String completeQuestId) {
+    public Reward(String id, String name, RewardType type, List<ItemGroup> items, String command, int xp,
+        boolean levels, String completeQuestId) {
         this.id = id;
         this.name = name;
         this.type = type;

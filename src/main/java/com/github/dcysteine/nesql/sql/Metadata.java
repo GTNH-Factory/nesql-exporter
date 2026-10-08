@@ -1,6 +1,13 @@
 package com.github.dcysteine.nesql.sql;
 
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import org.hibernate.annotations.SortNatural;
+
 import com.github.dcysteine.nesql.Tags;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -10,11 +17,6 @@ import jakarta.persistence.Id;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import org.hibernate.annotations.SortNatural;
-
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 /** Contains metadata about the repository. */
 @Entity
@@ -22,13 +24,15 @@ import java.util.TreeSet;
 @Getter
 @ToString
 public class Metadata implements Identifiable<Integer> {
+
     /** There will only ever be one metadata entry, and it will have this ID. */
     public static final int ID = 0;
 
     /**
      * The NESQL Exporter and SQL schema version.
      *
-     * <p>The server can check this field to know its version of the SQL schema, and check the
+     * <p>
+     * The server can check this field to know its version of the SQL schema, and check the
      * {@link #version} field on the {@code Metadata} row to know the version of the repository.
      */
     public static final String VERSION = Tags.EXPORTER_VERSION;
