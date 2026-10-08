@@ -1,0 +1,21 @@
+// Additional repositories on top of the GTNH defaults (GTNH Maven, CurseMaven, Modrinth).
+repositories {
+    maven {
+        name = "IC2 Maven2"
+        url = "https://maven2.ic2.player.to"
+        metadataSources {
+            mavenPom()
+            artifact()
+        }
+        content {
+            includeGroup("net.industrial-craft")
+        }
+    }
+    maven {
+        name = "Thaumcraft"
+        url = "https://gregtech.overminddl1.com"
+        content {
+            includeGroup("thaumcraft")
+        }
+    }
+}

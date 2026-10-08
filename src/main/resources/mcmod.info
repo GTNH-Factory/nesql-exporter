@@ -1,11 +1,21 @@
-[
 {
-    "modid": "nesql-exporter",
-    "name": "Not Enough SQL Exporter",
-    "description": "Exports recipes and other data into an H2 SQL database",
-    "version": "${version}",
-    "mcversion": "${mcversion}",
-    "url": "https://github.com/D-Cysteine/nesql-exporter",
-    "authorList": ["D-Cysteine"]
+	"modListVersion": 2,
+	"modList": [{
+		"modid": "${modId}",
+		"name": "${modName}",
+		"description": "Exports recipes and other data into an SQL database",
+		"version": "${modVersion}",
+		"mcversion": "${minecraftVersion}",
+		"url": "https://github.com/GTNH-Factory/nesql-exporter",
+		"updateUrl": "",
+		"authorList": ["GTNH-Factory"],
+		"credits": "Original mod by D-Cysteine; GTNH updates by ShadowTheAge",
+		"logoFile": "",
+		"screenshots": [],
+		"parent": "",
+		"requiredMods": [],
+		"dependencies": [],
+		"dependants": [],
+		"useDependencyInformation": false
+	}]
 }
-]

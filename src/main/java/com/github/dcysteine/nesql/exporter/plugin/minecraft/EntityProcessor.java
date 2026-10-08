@@ -17,18 +17,17 @@ public class EntityProcessor extends PluginHelper {
     }
 
     public void process() {
-        @SuppressWarnings("unchecked")
-        Map<String, Class<Entity>> entityMap = EntityList.stringToClassMapping;
+        Map<String, Class<? extends Entity>> entityMap = EntityList.stringToClassMapping;
         int total = entityMap.size();
         logger.info("Processing {} entities...", total);
 
         MobFactory mobFactory = new MobFactory(exporter);
         int count = 0;
-        for (Map.Entry<String, Class<Entity>> entry : entityMap.entrySet()) {
+        for (Map.Entry<String, Class<? extends Entity>> entry : entityMap.entrySet()) {
             count++;
 
             String entityName = entry.getKey();
-            Class<Entity> clazz = entry.getValue();
+            Class<? extends Entity> clazz = entry.getValue();
             if (clazz != null && EntityLiving.class.isAssignableFrom(clazz)) {
                 mobFactory.get(MobSpec.create(entityName));
             }
